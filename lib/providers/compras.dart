@@ -4,27 +4,28 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
-import 'package:gestionafacil_v3/models/cliente.dart';
 import 'package:gestionafacil_v3/models/producto.dart';
+import 'package:gestionafacil_v3/models/proveedor.dart';
 
-class VentasProvider extends ChangeNotifier {
-  final _url = '${dotenv.env['BASE_URL']}/api/ventas';
+class ComprasProvider extends ChangeNotifier {
+  final _url = '${dotenv.env['BASE_URL']}/api/compras';
   final _token = "${dotenv.env['TOKEN']}";
   List<ProductoModel> listaTemporal = [];
-  ClienteModel cliente = new ClienteModel(
+
+  ProveedorModel proveedor = new ProveedorModel(
     id: '-1',
-    nombre: 'Consumidor Final',
+    nombre: '',
     identificacion: '',
     domicilio: 'Tulcán',
     email: '',
   );
-  String comentario = 'Ninguno';
-  double ventaTotal = 0.0;
-  String comprobante = '000';
+
+  String comentario = 'Ninguna Novedad';
+  double compraTotal = 0.0;
 
   get obtenerListaTemporal => listaTemporal;
 
-  set agregarproducto(ProductoModel producto) {
+  set agregarProducto(ProductoModel producto) {
     final temp = listaTemporal
         .indexWhere((element) => element.codigo == producto.codigo);
     if (temp != -1) {
@@ -33,6 +34,7 @@ class VentasProvider extends ChangeNotifier {
     } else {
       listaTemporal.add(producto);
     }
+
     notifyListeners();
   }
 
@@ -93,16 +95,16 @@ class VentasProvider extends ChangeNotifier {
     listaTemporal.forEach((producto) {
       sum += producto.totalAux;
     });
-    ventaTotal = sum;
+    compraTotal = sum;
     return sum;
   }
 
-  set agregarCliente(ClienteModel cliente) {
-    this.cliente = cliente;
+  set agregarProveedor(ProveedorModel proveedor) {
+    this.proveedor = proveedor;
     notifyListeners();
   }
 
-  ClienteModel mostrarCliente() => this.cliente;
+  ProveedorModel mostrarProveedro() => this.proveedor;
 
   set agregarComentario(String comment) {
     comentario = comment;
@@ -128,7 +130,7 @@ class VentasProvider extends ChangeNotifier {
 
   Future<int> _obtenerUltimoComprobante() async {
     final _urlAux =
-        '${dotenv.env['BASE_URL']}/api/encabezadoVenta/consulta/ultimoEncabezado';
+        '${dotenv.env['BASE_URL']}/api/encabezadoCompra/consulta/ultimoEncabezado';
     final consulta = await http.get(
       Uri.parse(_urlAux),
       headers: <String, String>{
@@ -144,20 +146,19 @@ class VentasProvider extends ChangeNotifier {
     }
   }
 
-  // Future<Map<String, dynamic>> realizarVenta() async {
-  Future<Map<String, dynamic>> realizarVenta() async {
-    Map<String, dynamic> venta = {
+  Future<Map<String, dynamic>> realizarCompra() async {
+    Map<String, dynamic> compra = {
       "comprobante": await _obtenerUltimoComprobante(),
-      "clienteId": "${cliente.id}",
-      "fechaVenta": DateTime.now().toString(),
+      "proveedoreId": "${proveedor.id}",
+      "fechaCompra": DateTime.now().toString(),
       "comentario": comentario,
-      "totalVenta": ventaTotal,
-      "listaProductos": _configurarListaProductos(listaTemporal)
+      "totalCompra": compraTotal,
+      "listaProductos": _configurarListaProductos(listaTemporal),
     };
-
+    print('$compra');
     final consulta = await http.post(
       Uri.parse(_url),
-      body: jsonEncode(venta),
+      body: jsonEncode(compra),
       headers: <String, String>{
         "Content-Type": "application/json",
         "x-token": _token
@@ -166,11 +167,9 @@ class VentasProvider extends ChangeNotifier {
 
     if (consulta.statusCode != 200) {
       //error
-      print('Error');
-      return {"ok": false, "msg": 'Ha ocurrido un error'};
+      return {"ok": false, "msg": "Ha ocurrido un error"};
     } else {
-      print('Exito');
-      return {"ok": true, "msg": 'Ha salido todo muy bien'};
+      return {"ok": true, "msg": "Ha salido muy bien"};
     }
   }
 }

@@ -1,23 +1,24 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
-import 'package:gestionafacil_v3/models/cliente.dart';
 import 'package:gestionafacil_v3/models/producto.dart';
-import 'package:gestionafacil_v3/providers/ventas.dart';
-import 'package:gestionafacil_v3/widgets/buscador_cliente.dart';
+import 'package:gestionafacil_v3/models/proveedor.dart';
+import 'package:gestionafacil_v3/providers/compras.dart';
+import 'package:gestionafacil_v3/widgets/buscador_productos_compra.dart';
 import 'package:gestionafacil_v3/widgets/buscador_productos_venta.dart';
+import 'package:gestionafacil_v3/widgets/buscador_proveedor.dart';
 import 'package:provider/provider.dart';
 
-class VentasPage extends StatefulWidget {
-  const VentasPage({Key? key}) : super(key: key);
+class ComprasPage extends StatefulWidget {
+  const ComprasPage({Key? key}) : super(key: key);
 
   @override
-  _VentasPageState createState() => _VentasPageState();
+  _ComprasPageState createState() => _ComprasPageState();
 }
 
-class _VentasPageState extends State<VentasPage> {
+class _ComprasPageState extends State<ComprasPage> {
   List<ProductoModel> listaProductos = [];
-  ClienteModel clienteLista = new ClienteModel(
+  ProveedorModel proveedorLista = new ProveedorModel(
     nombre: '',
     identificacion: '',
     domicilio: '',
@@ -26,30 +27,31 @@ class _VentasPageState extends State<VentasPage> {
 
   @override
   Widget build(BuildContext context) {
-    final ventasProvider = Provider.of<VentasProvider>(context);
-    listaProductos = ventasProvider.mostrarListaTemporal();
-    clienteLista = ventasProvider.mostrarCliente();
+    final comprasProvider = Provider.of<ComprasProvider>(context);
+    listaProductos = comprasProvider.mostrarListaTemporal();
+    proveedorLista = comprasProvider.mostrarProveedro();
+
     return Scaffold(
       appBar: CupertinoNavigationBar(
         leading: CupertinoNavigationBarBackButton(
           onPressed: () => Navigator.pop(context),
           color: Colors.deepPurple,
         ),
-        middle: Text('Nueva Venta'),
+        middle: Text('Nueva Compra'),
         border: Border(bottom: BorderSide(width: 1)),
       ),
       body: SingleChildScrollView(
         child: Column(
           children: [
-            _fondoLista(context, ventasProvider),
+            _fondoLista(context, comprasProvider),
           ],
         ),
       ),
-      floatingActionButton: _botonSpeedDial(ventasProvider),
+      floatingActionButton: _botonSpeedDial(comprasProvider),
     );
   }
 
-  SpeedDial _botonSpeedDial(VentasProvider ventasProvider) {
+  SpeedDial _botonSpeedDial(ComprasProvider comprasProvider) {
     return SpeedDial(
         icon: Icons.add,
         buttonSize: 56,
@@ -58,7 +60,7 @@ class _VentasPageState extends State<VentasPage> {
         onPress: () {
           showSearch(
             context: context,
-            delegate: ProductosVentaSearchDelegate(ventasProvider),
+            delegate: ProductosCompraSearchDelegate(comprasProvider),
           );
           setState(() {});
         },
@@ -68,10 +70,10 @@ class _VentasPageState extends State<VentasPage> {
           SpeedDialChild(
             child: Icon(Icons.contactless_outlined),
             backgroundColor: Colors.green,
-            label: 'Vender',
+            label: 'Comprar',
             labelStyle: TextStyle(fontSize: 18.0),
             onTap: () {
-              ventasProvider.realizarVenta();
+              comprasProvider.realizarCompra();
             },
           ),
           SpeedDialChild(
@@ -79,18 +81,18 @@ class _VentasPageState extends State<VentasPage> {
             backgroundColor: Colors.red,
             label: 'Limpiar',
             labelStyle: TextStyle(fontSize: 18.0),
-            onTap: () => ventasProvider.limpiarLista(),
+            onTap: () => comprasProvider.limpiarLista(),
           ),
           SpeedDialChild(
             child: Icon(Icons.person_add_alt_1_outlined),
             backgroundColor: Colors.blue,
-            label: 'Agregar Cliente',
+            label: 'Agregar Proveedor',
             labelStyle: TextStyle(fontSize: 18.0),
             onTap: () {
               showSearch(
                 context: context,
-                delegate: ClientesSearchDelegate(
-                    ventasProvider, 'Número de cédula...'),
+                delegate: ProveedorSearchDelegate(
+                    comprasProvider, 'Nombre del Proveedor...'),
               );
               setState(() {});
             },
@@ -100,26 +102,26 @@ class _VentasPageState extends State<VentasPage> {
             backgroundColor: Colors.orange,
             label: 'Agregar Comentario',
             labelStyle: TextStyle(fontSize: 18.0),
-            onTap: () => Navigator.pushNamed(context, 'ventasComentario'),
+            onTap: () => Navigator.pushNamed(context, 'comprasComentario'),
           ),
         ]);
   }
 
-  _fondoLista(BuildContext context, VentasProvider ventasProvider) {
+  _fondoLista(BuildContext context, ComprasProvider comprasProvider) {
     final size = MediaQuery.of(context).size;
     return Table(
       children: [
         TableRow(children: [
           _contenedorTable(context, size.height * 0.3,
-              _clienteCajetin(context, ventasProvider))
+              _proveedorCajetin(context, comprasProvider))
         ]),
         TableRow(children: [
           _contenedorTable(context, size.height * 0.45,
-              _listaProductos(context, ventasProvider))
+              _listaProductos(context, comprasProvider))
         ]),
         TableRow(children: [
           _contenedorTable(
-              context, size.height * 0.1, _sumaLista(context, ventasProvider))
+              context, size.height * 0.1, _sumaLista(context, comprasProvider))
         ]),
       ],
     );
@@ -131,7 +133,7 @@ class _VentasPageState extends State<VentasPage> {
       height: high,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(30),
-        color: Colors.yellow[90],
+        color: Colors.blue[90],
         border: Border.all(
           color: Colors.deepPurple,
           style: BorderStyle.solid,
@@ -142,49 +144,47 @@ class _VentasPageState extends State<VentasPage> {
     );
   }
 
-  _clienteCajetin(BuildContext context, VentasProvider ventasProvider) {
+  _proveedorCajetin(BuildContext context, ComprasProvider comprasProvider) {
     return SingleChildScrollView(
       child: Column(
         children: [
           Center(
-            child:
-                Text('ClienteID: ${clienteLista.id} - ${clienteLista.nombre}'),
+            child: Text(
+                'ProveedorID: ${proveedorLista.id} - ${proveedorLista.nombre}'),
           ),
         ],
       ),
     );
   }
 
-  _listaProductos(BuildContext context, VentasProvider ventasProvider) {
+  _listaProductos(BuildContext context, ComprasProvider comprasProvider) {
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _tablaProductosTemporales(context, ventasProvider),
+          _tablaProductosTemporales(context, comprasProvider),
         ],
       ),
     );
   }
 
   _tablaProductosTemporales(
-      BuildContext context, VentasProvider ventasProvider) {
+      BuildContext context, ComprasProvider comprasProvider) {
     final columns = ['Cant.', 'Nombre', 'Precio', 'Total', ''];
     return DataTable(
       columns: _getColumnas(columns),
-      rows: _getFilas(listaProductos, ventasProvider),
+      rows: _getFilas(listaProductos, comprasProvider),
       columnSpacing: 20,
       dividerThickness: 0.5,
     );
   }
 
-  _sumaLista(BuildContext context, VentasProvider ventasProvider) {
+  _sumaLista(BuildContext context, ComprasProvider comprasProvider) {
     return Center(
-      child: Text('Total a Cobrar: ' +
-          ventasProvider.obtenerSumaTotal().toStringAsFixed(2)),
+      child: Text('Total a Pagar: ' +
+          comprasProvider.obtenerSumaTotal().toStringAsFixed(2)),
     );
   }
-
-//Componentes
 
   _getColumnas(List<String> columnas) => columnas
       .map((String columna) => DataColumn(
@@ -192,7 +192,7 @@ class _VentasPageState extends State<VentasPage> {
           ))
       .toList();
 
-  _getFilas(List<ProductoModel> productos, VentasProvider ventasProvider) =>
+  _getFilas(List<ProductoModel> productos, ComprasProvider comprasProvider) =>
       productos.map((ProductoModel producto) {
         // final i = 0;
         final cells = [
@@ -203,10 +203,10 @@ class _VentasPageState extends State<VentasPage> {
           '_${producto.codigo}'
           //acciones
         ];
-        return DataRow(cells: _getCeldas(cells, ventasProvider));
+        return DataRow(cells: _getCeldas(cells, comprasProvider));
       }).toList();
 
-  _getCeldas(List<dynamic> datos, VentasProvider ventasProvider) => datos
+  _getCeldas(List<dynamic> datos, ComprasProvider comprasProvider) => datos
       .map(
         (dato) => DataCell(
           (!dato.toString().contains('_'))
@@ -217,7 +217,7 @@ class _VentasPageState extends State<VentasPage> {
                       GestureDetector(
                         onTap: () {
                           final split = dato.toString().split('_')[1];
-                          ventasProvider.disminuirCantidad(split);
+                          comprasProvider.disminuirCantidad(split);
                         },
                         child: Icon(
                           CupertinoIcons.minus,
@@ -228,7 +228,7 @@ class _VentasPageState extends State<VentasPage> {
                       GestureDetector(
                         onTap: () {
                           final split = dato.toString().split('_')[1];
-                          ventasProvider.aumentarCantidad(split);
+                          comprasProvider.aumentarCantidad(split);
                         },
                         child: Icon(
                           CupertinoIcons.add,
@@ -239,7 +239,7 @@ class _VentasPageState extends State<VentasPage> {
                       GestureDetector(
                         onTap: () {
                           final split = dato.toString().split('_')[1];
-                          ventasProvider.eliminarProducto(split);
+                          comprasProvider.eliminarProducto(split);
                         },
                         child: Icon(
                           CupertinoIcons.delete,

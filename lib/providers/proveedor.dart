@@ -127,4 +127,38 @@ class ProveedorProvider extends ChangeNotifier {
       'msg': decodedData['msg'],
     };
   }
+
+  Future<List<ProveedorModel>> mostrarProveedorQueryNombre(
+      String nombre) async {
+    final consulta = await http.get(
+      Uri.parse('$_url/$nombre'),
+      headers: <String, String>{
+        "Content-Type": "application/json",
+        "x-token": _token
+      },
+    );
+
+    final Map<String, dynamic> decodedData = jsonDecode(consulta.body);
+
+    if (consulta.statusCode != 200) {
+      print('Status Code: ${consulta.statusCode} buscarClienteQuery');
+      return [];
+    }
+    final List<ProveedorModel> listaProveedores = [];
+    decodedData.forEach((key, value) {
+      if (key == 'proveedores') {
+        final List tmp = value;
+        tmp.forEach((valor) {
+          listaProveedores.add(new ProveedorModel(
+              id: valor['id'].toString(),
+              nombre: valor['nombre'],
+              identificacion: valor['identificacion'],
+              domicilio: valor['domicilio'],
+              email: valor['email']));
+        });
+      }
+    });
+
+    return listaProveedores;
+  }
 }

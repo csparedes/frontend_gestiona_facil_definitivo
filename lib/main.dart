@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:gestionafacil_v3/pages/cliente_nuevo.dart';
 import 'package:gestionafacil_v3/pages/clientes.dart';
+import 'package:gestionafacil_v3/pages/compras.dart';
+import 'package:gestionafacil_v3/pages/compras_comentario.dart';
 import 'package:gestionafacil_v3/pages/existencias.dart';
 import 'package:gestionafacil_v3/pages/home.dart';
 import 'package:gestionafacil_v3/pages/ingresos.dart';
@@ -16,6 +18,7 @@ import 'package:gestionafacil_v3/pages/usuarios.dart';
 import 'package:gestionafacil_v3/pages/venta_comentario.dart';
 import 'package:gestionafacil_v3/pages/ventas.dart';
 import 'package:gestionafacil_v3/providers/cliente.dart';
+import 'package:gestionafacil_v3/providers/compras.dart';
 import 'package:gestionafacil_v3/providers/kardex_existencias.dart';
 import 'package:gestionafacil_v3/providers/kardex_ingresos.dart';
 import 'package:gestionafacil_v3/providers/kardex_salida.dart';
@@ -45,6 +48,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => ClienteProvider()),
         ChangeNotifierProvider(create: (_) => ProveedorProvider()),
         ChangeNotifierProvider(create: (_) => VentasProvider()),
+        ChangeNotifierProvider(create: (_) => ComprasProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -66,6 +70,8 @@ class MyApp extends StatelessWidget {
           'proveedorNuevo': (_) => ProveedorNuevoPage(),
           'ventas': (_) => VentasPage(),
           'ventasComentario': (_) => VentaComentarioPage(),
+          'compras': (_) => ComprasPage(),
+          'comprasComentario': (_) => ComprasComentarioPage(),
         },
         // theme: ThemeData(primaryColor: Colors.deepPurple),
       ),

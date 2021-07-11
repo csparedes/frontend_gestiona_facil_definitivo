@@ -12,7 +12,7 @@ class CardTableAdmin extends StatelessWidget {
             color: Colors.blueAccent,
             icon: Icons.storefront,
             text: 'Compras',
-            onTap: () => print('Compras'),
+            onTap: () => Navigator.pushNamed(context, 'compras'),
           ),
           _SigleCard(
             color: Colors.pinkAccent,

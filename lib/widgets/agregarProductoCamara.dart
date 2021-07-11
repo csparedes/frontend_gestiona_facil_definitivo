@@ -1,9 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
-import 'package:gestionafacil_v3/models/producto.dart';
-import 'package:gestionafacil_v3/providers/productos.dart';
-import 'package:provider/provider.dart';
 
 Future<void> startBarcodeScanStream() async {
   FlutterBarcodeScanner.getBarcodeStreamReceiver(

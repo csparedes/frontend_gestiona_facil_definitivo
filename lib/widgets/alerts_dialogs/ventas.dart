@@ -1,6 +1,5 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:gestionafacil_v3/providers/ventas.dart';
 
 class AlertDialogVentaCamara {
   static showAlertDialog(BuildContext context, Widget child) {

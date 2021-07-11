@@ -6,9 +6,9 @@ import 'package:provider/provider.dart';
 
 import 'package:gestionafacil_v3/providers/productos.dart';
 
-class ProductosSearchDelegate extends SearchDelegate {
+class ProductosVentaSearchDelegate extends SearchDelegate {
   final ventasProvider;
-  ProductosSearchDelegate(this.ventasProvider);
+  ProductosVentaSearchDelegate(this.ventasProvider);
 
   @override
   List<Widget> buildActions(BuildContext context) {
