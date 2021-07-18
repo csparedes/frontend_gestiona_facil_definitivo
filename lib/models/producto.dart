@@ -21,20 +21,21 @@ class ProductoModel {
   String updatedAt;
   double cantidadAux;
   double totalAux;
+  String fechaCaducidadAux;
 
-  ProductoModel({
-    this.id = '',
-    required this.nombre,
-    required this.categoriumId,
-    this.categoriumString = '',
-    required this.codigo,
-    required this.precioVenta,
-    this.estado = true,
-    this.createdAt = '',
-    this.updatedAt = '',
-    this.cantidadAux = 0.0,
-    this.totalAux = 0.0,
-  });
+  ProductoModel(
+      {this.id = '',
+      required this.nombre,
+      required this.categoriumId,
+      this.categoriumString = '',
+      required this.codigo,
+      required this.precioVenta,
+      this.estado = true,
+      this.createdAt = '',
+      this.updatedAt = '',
+      this.cantidadAux = 0.0,
+      this.totalAux = 0.0,
+      this.fechaCaducidadAux = ''});
 
   factory ProductoModel.fromJson(Map<String, dynamic> json) => ProductoModel(
         id: json["id"],
@@ -46,6 +47,7 @@ class ProductoModel {
         estado: json["estado"],
         createdAt: json["createdAt"],
         updatedAt: json["updatedAt"],
+        fechaCaducidadAux: json["fechaCaducidadAux"],
       );
 
   Map<String, dynamic> toJson() => {
@@ -58,10 +60,21 @@ class ProductoModel {
         "estado": estado,
         "createdAt": createdAt,
         "updatedAt": updatedAt,
+        "fechaCaducidadAux": fechaCaducidadAux
       };
 
   void aumentarCantidad() {
     this.cantidadAux++;
+    this.totalAux = this.precioVenta * this.cantidadAux;
+  }
+
+  void modificarCantidad(String cantidad) {
+    this.cantidadAux = double.parse(cantidad);
+    this.totalAux = this.precioVenta * this.cantidadAux;
+  }
+
+  void modificarPrecio(String precio) {
+    this.precioVenta = double.parse(precio);
     this.totalAux = this.precioVenta * this.cantidadAux;
   }
 
@@ -72,4 +85,6 @@ class ProductoModel {
     }
     this.totalAux = this.precioVenta * this.cantidadAux;
   }
+
+  void asignarFechaCaducidad(String fecha) => this.fechaCaducidadAux = fecha;
 }

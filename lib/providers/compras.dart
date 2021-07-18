@@ -64,6 +64,26 @@ class ComprasProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void modificarCantidad(String codigo, cantidad) {
+    final temp =
+        listaTemporal.indexWhere((element) => element.codigo == codigo);
+    if (temp != -1) {
+      listaTemporal[temp].modificarCantidad(cantidad);
+    }
+    notifyListeners();
+  }
+
+  void modificarPrecio(String codigo, precio) {
+    final temp =
+        listaTemporal.indexWhere((element) => element.codigo == codigo);
+
+    print('temp $temp');
+    if (temp != -1) {
+      listaTemporal[temp].modificarPrecio(precio);
+    }
+    notifyListeners();
+  }
+
   void disminuirCantidad(String codigo) {
     final temp =
         listaTemporal.indexWhere((element) => element.codigo == codigo);
@@ -82,11 +102,19 @@ class ComprasProvider extends ChangeNotifier {
   void eliminarProducto(String codigo) {
     final temp =
         listaTemporal.indexWhere((element) => element.codigo == codigo);
-
     if (temp != -1) {
       listaTemporal.removeAt(temp);
     }
 
+    notifyListeners();
+  }
+
+  void asignarFechaCaducidad(String dato, String fecha) {
+    final aux = dato.split('_')[1];
+    final temp = listaTemporal.indexWhere((element) => element.codigo == aux);
+    if (temp != -1) {
+      listaTemporal[temp].fechaCaducidadAux = fecha;
+    }
     notifyListeners();
   }
 
@@ -120,7 +148,8 @@ class ComprasProvider extends ChangeNotifier {
       final temp = {
         'codigo': producto.codigo,
         'cantidad': producto.cantidadAux,
-        'valorUnitario': producto.precioVenta
+        'valorUnitario': producto.precioVenta,
+        'fechaCaducidad': producto.fechaCaducidadAux,
       };
       aux.add(temp);
     });

@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1081449669771",
+    "project_id": "gestionafacil2021",
+    "storage_bucket": "gestionafacil2021.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1081449669771:android:940c03ec1e45beaa9ca08e",
+        "android_client_info": {
+          "package_name": "ec.com.gesin.gestionafacil"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1081449669771-8u1f5n40jfgj6edmi4ljubs2a27chh4d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ec.com.gesin.gestionafacil",
+            "certificate_hash": "c3b827953795d42e6e30c7ec047432eef9b2848b"
+          }
+        },
+        {
+          "client_id": "1081449669771-mmdeq0o0m9rpj3p2ekv684e2q5k26s1o.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDdIMlNEg9nXz1CplSUzOs5XfTVY3b2PZM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1081449669771-mmdeq0o0m9rpj3p2ekv684e2q5k26s1o.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

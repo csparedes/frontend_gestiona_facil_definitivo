@@ -48,3 +48,6 @@ app.*.map.json
 
 # Archivo .env
 .env
+
+# Archivos txt
+*.txt

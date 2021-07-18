@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_rounded_date_picker/flutter_rounded_date_picker.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:gestionafacil_v3/models/producto.dart';
 import 'package:gestionafacil_v3/models/proveedor.dart';
 import 'package:gestionafacil_v3/providers/compras.dart';
+import 'package:gestionafacil_v3/widgets/alerts_dialogs/compras_precio.dart';
 import 'package:gestionafacil_v3/widgets/buscador_productos_compra.dart';
-import 'package:gestionafacil_v3/widgets/buscador_productos_venta.dart';
 import 'package:gestionafacil_v3/widgets/buscador_proveedor.dart';
 import 'package:provider/provider.dart';
 
@@ -18,6 +19,7 @@ class ComprasPage extends StatefulWidget {
 
 class _ComprasPageState extends State<ComprasPage> {
   List<ProductoModel> listaProductos = [];
+  DateTime selectedDate = DateTime.now();
   ProveedorModel proveedorLista = new ProveedorModel(
     nombre: '',
     identificacion: '',
@@ -170,11 +172,11 @@ class _ComprasPageState extends State<ComprasPage> {
 
   _tablaProductosTemporales(
       BuildContext context, ComprasProvider comprasProvider) {
-    final columns = ['Cant.', 'Nombre', 'Precio', 'Total', ''];
+    final columns = ['Cant.', 'Nombre', 'Precio', 'Total', 'Acciones'];
     return DataTable(
       columns: _getColumnas(columns),
       rows: _getFilas(listaProductos, comprasProvider),
-      columnSpacing: 20,
+      columnSpacing: 8,
       dividerThickness: 0.5,
     );
   }
@@ -196,9 +198,9 @@ class _ComprasPageState extends State<ComprasPage> {
       productos.map((ProductoModel producto) {
         // final i = 0;
         final cells = [
-          producto.cantidadAux.toStringAsFixed(0),
+          producto.cantidadAux.toStringAsFixed(1) + '#${producto.codigo}',
           producto.nombre,
-          producto.precioVenta.toStringAsFixed(2),
+          producto.precioVenta.toStringAsFixed(2) + '%${producto.codigo}',
           producto.totalAux.toStringAsFixed(2),
           '_${producto.codigo}'
           //acciones
@@ -210,10 +212,39 @@ class _ComprasPageState extends State<ComprasPage> {
       .map(
         (dato) => DataCell(
           (!dato.toString().contains('_'))
-              ? Text('$dato')
+              ? Container(
+                  child: (dato.toString().contains('%'))
+                      ? GestureDetector(
+                          onLongPress: () {
+                            final str = dato.toString().split('%')[1];
+                            AlertDialogEditarPrecioCompra.showAlertDialog(
+                                context, comprasProvider, str);
+                          },
+                          child: Text(dato.toString().split('%')[0]),
+                        )
+                      : (dato.toString().contains('#'))
+                          ? GestureDetector(
+                              onLongPress: () {
+                                final str = dato.toString().split('#')[1];
+                                AlertDialogEditarCantidadCompra.showAlertDialog(
+                                    context, comprasProvider, str);
+                              },
+                              child: Text(dato.toString().split('#')[0]),
+                            )
+                          : Text(dato.toString()),
+                )
               : Container(
                   child: Row(
                     children: [
+                      GestureDetector(
+                        onTap: () =>
+                            _selectDate(context, comprasProvider, dato),
+                        child: Icon(
+                          CupertinoIcons.calendar,
+                          color: Colors.deepPurple,
+                          size: 30,
+                        ),
+                      ),
                       GestureDetector(
                         onTap: () {
                           final split = dato.toString().split('_')[1];
@@ -256,4 +287,24 @@ class _ComprasPageState extends State<ComprasPage> {
         ),
       )
       .toList();
+
+  _selectDate(BuildContext context, ComprasProvider comprasProvider,
+      String dato) async {
+    final picked = await showRoundedDatePicker(
+      context: context,
+      initialDate: selectedDate,
+      firstDate: DateTime(2021),
+      lastDate: DateTime(2025),
+      borderRadius: 16,
+      theme: ThemeData(
+        primarySwatch: Colors.deepPurple,
+      ),
+    );
+    if (picked != null && picked != selectedDate)
+      setState(() {
+        selectedDate = picked;
+        final fechaCaducidad = picked.toString().split(' ')[0];
+        comprasProvider.asignarFechaCaducidad(dato, fechaCaducidad);
+      });
+  }
 }

@@ -1,4 +1,4 @@
-package com.example.gestionafacil_v3
+package ec.com.gesin.gestionafacil
 
 import io.flutter.embedding.android.FlutterActivity
 

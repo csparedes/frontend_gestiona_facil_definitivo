@@ -25,16 +25,49 @@ import 'package:gestionafacil_v3/providers/kardex_salida.dart';
 import 'package:gestionafacil_v3/providers/login.dart';
 import 'package:gestionafacil_v3/providers/productos.dart';
 import 'package:gestionafacil_v3/providers/proveedor.dart';
+import 'package:gestionafacil_v3/providers/push_notifications.dart';
 import 'package:gestionafacil_v3/providers/usuarios.dart';
 import 'package:gestionafacil_v3/providers/ventas.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
   await dotenv.load(fileName: ".env");
+  WidgetsFlutterBinding.ensureInitialized();
+  await PushNotificationsProvider.initializeApp();
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  _MyAppState createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final GlobalKey<NavigatorState> navigatorKey =
+      new GlobalKey<NavigatorState>();
+  final GlobalKey<ScaffoldMessengerState> messengerKey =
+      new GlobalKey<ScaffoldMessengerState>();
+
+  @override
+  void initState() {
+    super.initState();
+    PushNotificationsProvider.messagesStream.listen((message) {
+      final snackBar = SnackBar(
+        elevation: 40,
+        content: Text(
+          '$message',
+          style: TextStyle(
+            fontSize: 30,
+          ),
+        ),
+        duration: Duration(
+          milliseconds: 5000,
+        ),
+      );
+      messengerKey.currentState?.showSnackBar(snackBar);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
@@ -52,8 +85,14 @@ class MyApp extends StatelessWidget {
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
+        supportedLocales: [
+          Locale('es', ''),
+          Locale('en', ''),
+        ],
         title: 'Material App',
         initialRoute: 'login',
+        navigatorKey: navigatorKey,
+        scaffoldMessengerKey: messengerKey,
         routes: {
           'login': (_) => LoginPage(),
           'home': (_) => HomePage(),
