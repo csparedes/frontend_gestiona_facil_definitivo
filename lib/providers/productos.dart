@@ -21,7 +21,6 @@ class ProductosProvider extends ChangeNotifier {
     final Map<String, dynamic> decodedData = jsonDecode(consulta.body);
 
     if (consulta.statusCode != 200) {
-      print('Status Code: ${consulta.statusCode}');
       return [];
     }
     final List<ProductoModel> listaProductos = [];
@@ -29,8 +28,6 @@ class ProductosProvider extends ChangeNotifier {
       if (key == 'productos') {
         final List tmp = value;
         tmp.forEach((valor) {
-          // print(valor);
-
           listaProductos.add(
             new ProductoModel(
               nombre: valor['nombre'],
@@ -95,11 +92,23 @@ class ProductosProvider extends ChangeNotifier {
         'msg': decodedData['msg'],
       };
     }
-
+    //enviar notificación
+    final notificacionUrl =
+        "${dotenv.env['BASE_URL']}/api/notificaciones/actualizacionProducto";
+    final notificacion = await http.post(
+      Uri.parse(notificacionUrl),
+      headers: <String, String>{
+        "Content-Type": "application/json",
+        "x-token": _token
+      },
+    );
+    final Map<String, dynamic> decodedNotificacion =
+        json.decode(notificacion.body);
     return <String, dynamic>{
       'ok': true,
       'msg': decodedData['msg'],
-      'producto': decodedData['producto']
+      'producto': decodedData['producto'],
+      'notificacion': decodedNotificacion['msg']
     };
   }
 
@@ -140,7 +149,6 @@ class ProductosProvider extends ChangeNotifier {
     final Map<String, dynamic> decodedData = jsonDecode(consulta.body);
 
     if (consulta.statusCode != 200) {
-      print('Status Code: ${consulta.statusCode}');
       return [];
     }
     final List<ProductoModel> listaProductos = [];
@@ -148,8 +156,6 @@ class ProductosProvider extends ChangeNotifier {
       if (key == 'producto') {
         final List tmp = value;
         tmp.forEach((valor) {
-          // print(valor);
-
           listaProductos.add(
             new ProductoModel(
               nombre: valor['nombre'],
@@ -178,7 +184,6 @@ class ProductosProvider extends ChangeNotifier {
     final Map<String, dynamic> decodedData = jsonDecode(consulta.body);
 
     if (consulta.statusCode != 200) {
-      print('Status Code: ${consulta.statusCode}');
       return [];
     }
     final List<ProductoModel> listaProductos = [];
@@ -186,8 +191,6 @@ class ProductosProvider extends ChangeNotifier {
       if (key == 'productos') {
         final List tmp = value;
         tmp.forEach((valor) {
-          // print(valor);
-
           listaProductos.add(
             new ProductoModel(
               nombre: valor['nombre'],

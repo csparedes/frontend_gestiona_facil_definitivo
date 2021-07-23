@@ -63,8 +63,11 @@ class _ProductosPageState extends State<ProductosPage> {
           );
         }
         return Container(
-          child: CupertinoActivityIndicator(
-            radius: 20,
+          height: MediaQuery.of(context).size.height,
+          child: Center(
+            child: CupertinoActivityIndicator(
+              radius: 20,
+            ),
           ),
         );
       },

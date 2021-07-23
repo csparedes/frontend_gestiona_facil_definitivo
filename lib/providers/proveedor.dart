@@ -22,7 +22,6 @@ class ProveedorProvider extends ChangeNotifier {
     final Map<String, dynamic> decodedData = jsonDecode(consulta.body);
 
     if (consulta.statusCode != 200) {
-      print('Status Code: ${consulta.statusCode}');
       return [];
     }
     final List<ProveedorModel> listaProveedores = [];
@@ -30,8 +29,6 @@ class ProveedorProvider extends ChangeNotifier {
       if (key == 'proveedores') {
         final List tmp = value;
         tmp.forEach((valor) {
-          print(valor);
-
           listaProveedores.add(
             new ProveedorModel(
               nombre: valor['nombre'],
@@ -141,7 +138,6 @@ class ProveedorProvider extends ChangeNotifier {
     final Map<String, dynamic> decodedData = jsonDecode(consulta.body);
 
     if (consulta.statusCode != 200) {
-      print('Status Code: ${consulta.statusCode} buscarClienteQuery');
       return [];
     }
     final List<ProveedorModel> listaProveedores = [];

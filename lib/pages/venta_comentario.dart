@@ -27,9 +27,21 @@ class VentaComentarioPage extends StatelessWidget {
               child: TextField(
                 onChanged: (value) => comentario = value,
                 decoration: InputDecoration(
+                  icon: Icon(
+                    Icons.short_text_outlined,
+                    color: Colors.deepPurple,
+                  ),
                   labelText: 'Comentario',
+                  labelStyle: TextStyle(color: Colors.deepPurple),
                   hintText: 'Ingrese su comentario aquí',
+                  enabledBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.deepPurple),
+                  ),
+                  focusedBorder: UnderlineInputBorder(
+                    borderSide: BorderSide(color: Colors.deepPurple),
+                  ),
                 ),
+                autofocus: true,
               ),
             ),
           ],
@@ -42,7 +54,6 @@ class VentaComentarioPage extends StatelessWidget {
         visible: true,
         onPress: () {
           ventasProvider.agregarComentario = comentario;
-          print(ventasProvider.mostrarComentario);
           Navigator.pop(context);
         },
         children: [

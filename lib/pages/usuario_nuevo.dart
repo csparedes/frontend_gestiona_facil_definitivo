@@ -237,13 +237,9 @@ class _UsuarioNuevoPageState extends State<UsuarioNuevoPage> {
     final peticion = await usuariosProvider.crearUsuario(usuario);
 
     if (peticion['ok']) {
-      print(peticion['msg']);
-      print(peticion['usuario']['password']);
       AlertDialogUsuarioCreado.showAlertDialog(
           context, peticion['usuario']['nombre']);
     } else {
-      // print(peticion['msg']);
-      print(peticion['msg']);
       AlertDialogUsuarioCreadoFail.showAlertDialog(context, peticion['msg']);
     }
   }
@@ -275,12 +271,8 @@ class _UsuarioNuevoPageState extends State<UsuarioNuevoPage> {
     final peticion = await usuariosProvider.editarUsuario(usuario.id, usuario);
 
     if (peticion['ok']) {
-      print(peticion['msg']);
-      print(peticion['usuario']['password']);
       AlertDialogOkEditUsuarioWidget.showAlertDialog(context);
     } else {
-      // print(peticion['msg']);
-      print(peticion['msg']);
       AlertDialogFailEditUsuarioWidget.showAlertDialog(context);
     }
   }

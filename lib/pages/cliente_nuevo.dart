@@ -105,7 +105,10 @@ class _ClienteNuevoPageState extends State<ClienteNuevoPage> {
       initialValue: (nombre == '') ? null : nombre,
       textCapitalization: TextCapitalization.sentences,
       decoration: InputDecoration(
-        icon: Icon(Icons.person_outline, color: Colors.deepPurple),
+        icon: Icon(
+          Icons.person_outline,
+          color: Colors.deepPurple,
+        ),
         labelText: 'Nombre',
         labelStyle: TextStyle(color: Colors.deepPurple),
         hintText: 'Ingrese el nombre del cliente',
@@ -125,7 +128,10 @@ class _ClienteNuevoPageState extends State<ClienteNuevoPage> {
       initialValue: (identificacion == '') ? null : identificacion,
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
-        icon: Icon(Icons.person_outline, color: Colors.deepPurple),
+        icon: Icon(
+          Icons.badge_outlined,
+          color: Colors.deepPurple,
+        ),
         labelText: 'Identificación',
         labelStyle: TextStyle(color: Colors.deepPurple),
         hintText: 'Escriba la cédula o RUC',
@@ -146,7 +152,10 @@ class _ClienteNuevoPageState extends State<ClienteNuevoPage> {
       keyboardType: TextInputType.name,
       textCapitalization: TextCapitalization.sentences,
       decoration: InputDecoration(
-        icon: Icon(Icons.person_outline, color: Colors.deepPurple),
+        icon: Icon(
+          Icons.location_city_outlined,
+          color: Colors.deepPurple,
+        ),
         labelText: 'Domicilio',
         labelStyle: TextStyle(color: Colors.deepPurple),
         hintText: 'Escriba el lugar de residencia del cliente',
@@ -166,7 +175,10 @@ class _ClienteNuevoPageState extends State<ClienteNuevoPage> {
         initialValue: (email == '') ? null : email,
         keyboardType: TextInputType.emailAddress,
         decoration: InputDecoration(
-          icon: Icon(Icons.person_outline, color: Colors.deepPurple),
+          icon: Icon(
+            Icons.email_outlined,
+            color: Colors.deepPurple,
+          ),
           labelText: 'Email',
           labelStyle: TextStyle(color: Colors.deepPurple),
           hintText: 'Escriba correo electrónico',
@@ -241,9 +253,9 @@ class _ClienteNuevoPageState extends State<ClienteNuevoPage> {
     final peticion = await clienteProvider.crearClienteNuevo(cliente);
 
     if (peticion['ok']) {
-      AlertDialogOkEditClienteWidget.showAlertDialog(context);
+      AlertDialogOkCreateClienteWidget.showAlertDialog(context);
     } else {
-      AlertDialogFailEditClienteWidget.showAlertDialog(context);
+      AlertDialogFailCreateClienteWidget.showAlertDialog(context);
     }
   }
 }

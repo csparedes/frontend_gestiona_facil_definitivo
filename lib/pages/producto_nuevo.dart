@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-
+import 'package:select_form_field/select_form_field.dart';
 import 'package:gestionafacil_v3/models/producto.dart';
+import 'package:gestionafacil_v3/providers/categoria.dart';
 import 'package:gestionafacil_v3/providers/productos.dart';
 import 'package:gestionafacil_v3/widgets/alerts_dialogs/productos.dart';
 import 'package:provider/provider.dart';
@@ -46,7 +47,7 @@ class _ProductoNuevoPageState extends State<ProductoNuevoPage> {
           onPressed: () => Navigator.pop(context),
           color: Colors.deepPurple,
         ),
-        middle: Text('Editar Usuario'),
+        middle: Text('Editar Producto'),
         border: Border(bottom: BorderSide(width: 1)),
       ),
       body: SingleChildScrollView(
@@ -58,7 +59,7 @@ class _ProductoNuevoPageState extends State<ProductoNuevoPage> {
               children: [
                 _nombre(producto.nombre),
                 SizedBox(height: 5),
-                _categoria(producto.categoriumId),
+                _categoria(context, producto.categoriumId),
                 SizedBox(height: 5),
                 _codigo(producto.codigo),
                 SizedBox(height: 5),
@@ -78,7 +79,7 @@ class _ProductoNuevoPageState extends State<ProductoNuevoPage> {
       initialValue: (nombre == '') ? null : nombre,
       textCapitalization: TextCapitalization.sentences,
       decoration: InputDecoration(
-        icon: Icon(Icons.person_outline, color: Colors.deepPurple),
+        icon: Icon(Icons.rice_bowl_outlined, color: Colors.deepPurple),
         labelText: 'Nombre',
         labelStyle: TextStyle(color: Colors.deepPurple),
         hintText: 'Ingrese el nombre del producto',
@@ -93,26 +94,26 @@ class _ProductoNuevoPageState extends State<ProductoNuevoPage> {
     );
   }
 
-  _categoria(String categoria) {
-    //TODO: Implementar future builder en la rueda de selección
-    return TextFormField(
-      initialValue: (categoria == '') ? null : categoria,
-      textCapitalization: TextCapitalization.characters,
-      keyboardType: TextInputType.number,
-      decoration: InputDecoration(
-        icon: Icon(Icons.person_outline, color: Colors.deepPurple),
-        labelText: 'Categoria',
-        labelStyle: TextStyle(color: Colors.deepPurple),
-        hintText: 'Escriba la categoria',
-        enabledBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.deepPurple),
-        ),
-        focusedBorder: UnderlineInputBorder(
-          borderSide: BorderSide(color: Colors.deepPurple),
-        ),
-      ),
-      onSaved: (value) => producto.categoriumId = value.toString(),
-    );
+  _categoria(BuildContext context, String categoria) {
+    final categoriaProvider = Provider.of<CategoriaProvider>(context);
+    return FutureBuilder(
+        future: categoriaProvider.cargarCategoriasWidget(),
+        builder: (_, snapshot) {
+          if (!snapshot.hasData) {
+            return Center(child: CupertinoActivityIndicator());
+          }
+          final List<Map<String, dynamic>> _items =
+              snapshot.data as List<Map<String, dynamic>>;
+          return SelectFormField(
+            type: SelectFormFieldType.dropdown,
+            initialValue: (categoria != '') ? categoria : null,
+            icon: Icon(Icons.category),
+            labelText: 'Categoría',
+            hintText: 'Seleccione la categoría',
+            onSaved: (value) => producto.categoriumId = value.toString(),
+            items: _items,
+          );
+        });
   }
 
   _codigo(String codigo) {
@@ -121,7 +122,7 @@ class _ProductoNuevoPageState extends State<ProductoNuevoPage> {
       initialValue: (codigo == '') ? null : codigo,
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
-        icon: Icon(Icons.person_outline, color: Colors.deepPurple),
+        icon: Icon(Icons.horizontal_split_outlined, color: Colors.deepPurple),
         labelText: 'Codigo',
         labelStyle: TextStyle(color: Colors.deepPurple),
         hintText: 'Escriba el codigo',
@@ -141,7 +142,7 @@ class _ProductoNuevoPageState extends State<ProductoNuevoPage> {
       initialValue: (precio == 0.0) ? null : precio.toString(),
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
-        icon: Icon(Icons.person_outline, color: Colors.deepPurple),
+        icon: Icon(Icons.price_check_outlined, color: Colors.deepPurple),
         labelText: 'Precio',
         labelStyle: TextStyle(color: Colors.deepPurple),
         hintText: 'Escriba el Precio',
@@ -184,11 +185,8 @@ class _ProductoNuevoPageState extends State<ProductoNuevoPage> {
         await productosProvider.editarProducto(producto.codigo, producto);
 
     if (peticion['ok']) {
-      print(peticion['msg']);
-      print(peticion['producto']);
       AlertDialogOkEditProductoWidget.showAlertDialog(context);
     } else {
-      print(peticion['msg']);
       AlertDialogFailEditProductoWidget.showAlertDialog(
           context, peticion['msg']);
     }
@@ -201,7 +199,7 @@ class _ProductoNuevoPageState extends State<ProductoNuevoPage> {
           onPressed: () => Navigator.pop(context),
           color: Colors.deepPurple,
         ),
-        middle: Text('Editar Usuario'),
+        middle: Text('Crear Producto'),
         border: Border(bottom: BorderSide(width: 1)),
       ),
       body: SingleChildScrollView(
@@ -213,7 +211,7 @@ class _ProductoNuevoPageState extends State<ProductoNuevoPage> {
               children: [
                 _nombre(producto.nombre),
                 SizedBox(height: 5),
-                _categoria(producto.categoriumId),
+                _categoria(context, producto.categoriumId),
                 SizedBox(height: 5),
                 _codigo(producto.codigo),
                 SizedBox(height: 5),
@@ -255,11 +253,8 @@ class _ProductoNuevoPageState extends State<ProductoNuevoPage> {
     final peticion = await productosProvider.crearProductoNuevo(producto);
 
     if (peticion['ok']) {
-      print(peticion['msg']);
-      print(peticion['producto']);
       AlertDialogOkCrearProducto.showAlertDialog(context);
     } else {
-      print(peticion['msg']);
       AlertDialogFailCrearProducto.showAlertDialog(context, peticion['msg']);
     }
   }

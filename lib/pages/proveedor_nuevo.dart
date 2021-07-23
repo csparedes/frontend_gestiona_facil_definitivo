@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:gestionafacil_v3/models/proveedor.dart';
 import 'package:gestionafacil_v3/providers/proveedor.dart';
 import 'package:gestionafacil_v3/widgets/alerts_dialogs/clientes.dart';
+import 'package:gestionafacil_v3/widgets/alerts_dialogs/proveedores.dart';
 import 'package:provider/provider.dart';
 
 class ProveedorNuevoPage extends StatefulWidget {
@@ -39,7 +40,7 @@ class _ProveedorNuevoPageState extends State<ProveedorNuevoPage> {
           onPressed: () => Navigator.pop(context),
           color: Colors.deepPurple,
         ),
-        middle: Text('Crear Cliente'),
+        middle: Text('Crear Proveedor'),
         border: Border(bottom: BorderSide(width: 1)),
       ),
       body: SingleChildScrollView(
@@ -106,7 +107,10 @@ class _ProveedorNuevoPageState extends State<ProveedorNuevoPage> {
       initialValue: (nombre == '') ? null : nombre,
       textCapitalization: TextCapitalization.sentences,
       decoration: InputDecoration(
-        icon: Icon(Icons.person_outline, color: Colors.deepPurple),
+        icon: Icon(
+          Icons.person_outline,
+          color: Colors.deepPurple,
+        ),
         labelText: 'Nombre',
         labelStyle: TextStyle(color: Colors.deepPurple),
         hintText: 'Ingrese el nombre del Proveedor',
@@ -126,7 +130,10 @@ class _ProveedorNuevoPageState extends State<ProveedorNuevoPage> {
       initialValue: (identificacion == '') ? null : identificacion,
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
-        icon: Icon(Icons.person_outline, color: Colors.deepPurple),
+        icon: Icon(
+          Icons.badge_outlined,
+          color: Colors.deepPurple,
+        ),
         labelText: 'Identificación',
         labelStyle: TextStyle(color: Colors.deepPurple),
         hintText: 'Escriba la cédula o RUC',
@@ -147,7 +154,10 @@ class _ProveedorNuevoPageState extends State<ProveedorNuevoPage> {
       keyboardType: TextInputType.name,
       textCapitalization: TextCapitalization.sentences,
       decoration: InputDecoration(
-        icon: Icon(Icons.person_outline, color: Colors.deepPurple),
+        icon: Icon(
+          Icons.location_city_outlined,
+          color: Colors.deepPurple,
+        ),
         labelText: 'Domicilio',
         labelStyle: TextStyle(color: Colors.deepPurple),
         hintText: 'Escriba el lugar de residencia del proveedor',
@@ -167,7 +177,10 @@ class _ProveedorNuevoPageState extends State<ProveedorNuevoPage> {
         initialValue: (email == '') ? null : email,
         keyboardType: TextInputType.emailAddress,
         decoration: InputDecoration(
-          icon: Icon(Icons.person_outline, color: Colors.deepPurple),
+          icon: Icon(
+            Icons.email_outlined,
+            color: Colors.deepPurple,
+          ),
           labelText: 'Email',
           labelStyle: TextStyle(color: Colors.deepPurple),
           hintText: 'Escriba correo electrónico',
@@ -242,9 +255,9 @@ class _ProveedorNuevoPageState extends State<ProveedorNuevoPage> {
     final peticion = await proveedorProvider.crearProveedorNuevo(proveedor);
 
     if (peticion['ok']) {
-      AlertDialogOkEditClienteWidget.showAlertDialog(context);
+      AlertDialogOkCreateProveedorWidget.showAlertDialog(context);
     } else {
-      AlertDialogFailEditClienteWidget.showAlertDialog(context);
+      AlertDialogFailCreateClienteWidget.showAlertDialog(context);
     }
   }
 }

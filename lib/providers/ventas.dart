@@ -12,7 +12,7 @@ class VentasProvider extends ChangeNotifier {
   final _token = "${dotenv.env['TOKEN']}";
   List<ProductoModel> listaTemporal = [];
   ClienteModel cliente = new ClienteModel(
-    id: '-1',
+    id: '0',
     nombre: 'Consumidor Final',
     identificacion: '',
     domicilio: 'Tulcán',
@@ -58,7 +58,6 @@ class VentasProvider extends ChangeNotifier {
     if (temp != -1) {
       listaTemporal[temp].aumentarCantidad();
     }
-
     notifyListeners();
   }
 
@@ -93,7 +92,7 @@ class VentasProvider extends ChangeNotifier {
     listaTemporal.forEach((producto) {
       sum += producto.totalAux;
     });
-    ventaTotal = sum;
+    this.ventaTotal = sum;
     return sum;
   }
 
@@ -140,15 +139,72 @@ class VentasProvider extends ChangeNotifier {
       return -1;
     } else {
       final resp = jsonDecode(consulta.body);
-      return resp['comprobante']['ultimoComprobante'] + 1;
+      return (resp['comprobante']['ultimoComprobante'] == null)
+          ? 1
+          : resp['comprobante']['ultimoComprobante'] + 1;
     }
   }
 
   // Future<Map<String, dynamic>> realizarVenta() async {
   Future<Map<String, dynamic>> realizarVenta() async {
+    double saver = this.ventaTotal;
     Map<String, dynamic> venta = {
       "comprobante": await _obtenerUltimoComprobante(),
       "clienteId": "${cliente.id}",
+      "fechaVenta": DateTime.now().toString(),
+      "comentario": this.comentario,
+      "totalVenta": saver,
+      "listaProductos": _configurarListaProductos(listaTemporal)
+    };
+
+    final consulta = await http.post(
+      Uri.parse(_url),
+      body: jsonEncode(venta),
+      headers: <String, String>{
+        "Content-Type": "application/json",
+        "x-token": _token
+      },
+    );
+    if (consulta.statusCode != 200) {
+      //error
+
+      return {"ok": false, "msg": 'Ha ocurrido un error'};
+    } else {
+      return {"ok": true, "msg": 'Ha salido todo muy bien'};
+    }
+  }
+
+  Future<Map<String, dynamic>> realizarDonacion() async {
+    Map<String, dynamic> venta = {
+      "comprobante": await _obtenerUltimoComprobante(),
+      "clienteId": "2",
+      "fechaVenta": DateTime.now().toString(),
+      "comentario": comentario,
+      "totalVenta": obtenerSumaTotal(),
+      "listaProductos": _configurarListaProductos(listaTemporal)
+    };
+
+    final consulta = await http.post(
+      Uri.parse(_url),
+      body: jsonEncode(venta),
+      headers: <String, String>{
+        "Content-Type": "application/json",
+        "x-token": _token
+      },
+    );
+
+    if (consulta.statusCode != 200) {
+      //error
+      return {"ok": false, "msg": 'Ha ocurrido un error'};
+    } else {
+      return {"ok": true, "msg": 'Ha salido todo muy bien'};
+    }
+  }
+
+  Future<Map<String, dynamic>> realizarConsumo() async {
+    Map<String, dynamic> venta = {
+      "comprobante": await _obtenerUltimoComprobante(),
+      "clienteId": "1",
       "fechaVenta": DateTime.now().toString(),
       "comentario": comentario,
       "totalVenta": ventaTotal,
@@ -166,10 +222,8 @@ class VentasProvider extends ChangeNotifier {
 
     if (consulta.statusCode != 200) {
       //error
-      print('Error');
       return {"ok": false, "msg": 'Ha ocurrido un error'};
     } else {
-      print('Exito');
       return {"ok": true, "msg": 'Ha salido todo muy bien'};
     }
   }

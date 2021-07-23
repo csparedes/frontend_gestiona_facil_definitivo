@@ -4,6 +4,7 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:gestionafacil_v3/models/cliente.dart';
 import 'package:gestionafacil_v3/models/producto.dart';
 import 'package:gestionafacil_v3/providers/ventas.dart';
+import 'package:gestionafacil_v3/widgets/alerts_dialogs/ventas.dart';
 import 'package:gestionafacil_v3/widgets/buscador_cliente.dart';
 import 'package:gestionafacil_v3/widgets/buscador_productos_venta.dart';
 import 'package:provider/provider.dart';
@@ -72,6 +73,8 @@ class _VentasPageState extends State<VentasPage> {
             labelStyle: TextStyle(fontSize: 18.0),
             onTap: () {
               ventasProvider.realizarVenta();
+              AlertDialogVentaRealizada.showAlertDialog(context);
+              ventasProvider.limpiarLista();
             },
           ),
           SpeedDialChild(
@@ -110,8 +113,12 @@ class _VentasPageState extends State<VentasPage> {
     return Table(
       children: [
         TableRow(children: [
-          _contenedorTable(context, size.height * 0.3,
+          _contenedorTable(context, size.height * 0.05,
               _clienteCajetin(context, ventasProvider))
+        ]),
+        TableRow(children: [
+          _contenedorTable(context, size.height * 0.25,
+              _camaraCajetin(context, ventasProvider))
         ]),
         TableRow(children: [
           _contenedorTable(context, size.height * 0.45,
@@ -147,11 +154,16 @@ class _VentasPageState extends State<VentasPage> {
       child: Column(
         children: [
           Center(
-            child:
-                Text('ClienteID: ${clienteLista.id} - ${clienteLista.nombre}'),
+            child: Text('Cliente: ${clienteLista.id} - ${clienteLista.nombre}'),
           ),
         ],
       ),
+    );
+  }
+
+  _camaraCajetin(BuildContext context, VentasProvider ventasProvider) {
+    return Center(
+      child: Text('Aquí va la cámara'),
     );
   }
 
@@ -168,11 +180,11 @@ class _VentasPageState extends State<VentasPage> {
 
   _tablaProductosTemporales(
       BuildContext context, VentasProvider ventasProvider) {
-    final columns = ['Cant.', 'Nombre', 'Precio', 'Total', ''];
+    final columns = ['Cant.', 'Nombre', 'Precio', 'Total', 'Acciones'];
     return DataTable(
       columns: _getColumnas(columns),
       rows: _getFilas(listaProductos, ventasProvider),
-      columnSpacing: 20,
+      columnSpacing: 18,
       dividerThickness: 0.5,
     );
   }

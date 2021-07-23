@@ -37,11 +37,32 @@ class LoginProvider with ChangeNotifier {
     );
     final Map<String, dynamic> decodedData2 = jsonDecode(consulta2.body);
 
+    final consulta3 = await http.post(
+      Uri.parse(_url + '/notificaciones/productosPorCaducarse'),
+      headers: <String, String>{
+        "Content-Type": "application/json",
+        "x-token": decodedData['token']
+      },
+    );
+    final Map<String, dynamic> decodedData3 = jsonDecode(consulta3.body);
+    final consulta4 = await http.post(
+      Uri.parse(_url + '/notificaciones/bajoStock'),
+      headers: <String, String>{
+        "Content-Type": "application/json",
+        "x-token": decodedData['token']
+      },
+    );
+    final Map<String, dynamic> decodedData4 = jsonDecode(consulta4.body);
+
     return <String, dynamic>{
       'ok': true,
       "usuario": decodedData['usuario'],
       "token": decodedData['token'],
-      "firebase": decodedData2['msg']
+      "firebase": decodedData2['msg'],
+      "notificaciones": <String, String>{
+        "Caducados": decodedData3['msg'],
+        "Stock": decodedData4['msg']
+      }
     };
   }
 }

@@ -55,8 +55,6 @@ class UsuariosProvider extends ChangeNotifier {
       if (key == 'usuarios') {
         final List tmp = value;
         tmp.forEach((valor) {
-          // print(valor);
-
           listaUsuarios.add(
             new UsuarioModel(
                 id: valor['id'].toString(),
@@ -65,12 +63,8 @@ class UsuariosProvider extends ChangeNotifier {
                 email: valor['email']),
           );
         });
-        // print(tmp);
-        // print('value: $value');
-
       }
     });
-    // print(listaUsuarios);
 
     return listaUsuarios;
   }

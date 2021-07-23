@@ -102,8 +102,6 @@ class ClientesSearchDelegate extends SearchDelegate {
                                   email: email);
                               ventasProvider.agregarCliente = temp;
                               this.close(context, null);
-                              // print(ventasProvider.imprimirLista);
-                              //Agregar Productos a la lista inicial
                             },
                             child: Icon(
                               CupertinoIcons.add,

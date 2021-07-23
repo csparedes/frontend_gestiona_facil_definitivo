@@ -47,21 +47,24 @@ class _ClientesPageState extends State<ClientesPage> {
 
   _tablaClientes(BuildContext context) {
     final clienteProvider = Provider.of<ClienteProvider>(context);
-    final columnas = ['Nombre', 'Identificación', 'Domicilio', ''];
+    final columnas = ['Nombre', 'Identificación', 'Domicilio', 'Acciones'];
 
     return FutureBuilder(
       future: clienteProvider.mostrarClientes(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
           return DataTable(
-            columnSpacing: 40,
+            columnSpacing: 30,
             columns: _getColumnas(columnas),
             rows: _getFilas(snapshot.data),
           );
         }
         return Container(
-          child: CupertinoActivityIndicator(
-            radius: 20,
+          height: MediaQuery.of(context).size.height,
+          child: Center(
+            child: CupertinoActivityIndicator(
+              radius: 20,
+            ),
           ),
         );
       },

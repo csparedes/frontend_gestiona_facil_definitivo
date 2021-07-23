@@ -22,7 +22,6 @@ class ClienteProvider extends ChangeNotifier {
     final Map<String, dynamic> decodedData = jsonDecode(consulta.body);
 
     if (consulta.statusCode != 200) {
-      print('Status Code: ${consulta.statusCode}');
       return [];
     }
     final List<ClienteModel> listaClientes = [];
@@ -30,8 +29,6 @@ class ClienteProvider extends ChangeNotifier {
       if (key == 'clientes') {
         final List tmp = value;
         tmp.forEach((valor) {
-          print(valor);
-
           listaClientes.add(new ClienteModel(
               nombre: valor['nombre'],
               identificacion: valor['identificacion'],
@@ -137,7 +134,6 @@ class ClienteProvider extends ChangeNotifier {
     final Map<String, dynamic> decodedData = jsonDecode(consulta.body);
 
     if (consulta.statusCode != 200) {
-      print('Status Code: ${consulta.statusCode} buscarClienteQuery');
       return [];
     }
     final List<ClienteModel> listaClientes = [];

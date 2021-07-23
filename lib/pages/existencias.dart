@@ -38,7 +38,7 @@ class _ExistenciasPageState extends State<ExistenciasPage> {
 
   _tablaExistencias(BuildContext context) {
     final kardexProvider = Provider.of<KardexExistenciasProvider>(context);
-    final columnas = ['Producto', 'Expiración', 'Cantidad'];
+    final columnas = ['Producto', 'Expiración', 'Cantidad', 'Precio\nCompra'];
 
     return FutureBuilder(
       future: kardexProvider.mostrarExistencias(),
@@ -51,10 +51,13 @@ class _ExistenciasPageState extends State<ExistenciasPage> {
             rows: _getFilas(listaExistencias),
           );
         }
-        return Center(
-            child: CupertinoActivityIndicator(
-          radius: 20,
-        ));
+        return Container(
+          height: MediaQuery.of(context).size.height,
+          child: Center(
+              child: CupertinoActivityIndicator(
+            radius: 20,
+          )),
+        );
       },
     );
   }
@@ -70,7 +73,8 @@ class _ExistenciasPageState extends State<ExistenciasPage> {
         final cells = [
           kardex.productoString,
           kardex.fechaCaducidad.toString(),
-          kardex.cantidad.toString()
+          kardex.cantidad.toString(),
+          kardex.valorIngreso.toString()
         ];
         return DataRow(cells: _getCeldas(cells));
       }).toList();

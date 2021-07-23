@@ -5,6 +5,7 @@ import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:gestionafacil_v3/models/producto.dart';
 import 'package:gestionafacil_v3/models/proveedor.dart';
 import 'package:gestionafacil_v3/providers/compras.dart';
+import 'package:gestionafacil_v3/widgets/alerts_dialogs/compras.dart';
 import 'package:gestionafacil_v3/widgets/alerts_dialogs/compras_precio.dart';
 import 'package:gestionafacil_v3/widgets/buscador_productos_compra.dart';
 import 'package:gestionafacil_v3/widgets/buscador_proveedor.dart';
@@ -41,6 +42,15 @@ class _ComprasPageState extends State<ComprasPage> {
         ),
         middle: Text('Nueva Compra'),
         border: Border(bottom: BorderSide(width: 1)),
+        trailing: GestureDetector(
+          onTap: () {
+            Navigator.pushNamed(context, 'listaPedidos');
+          },
+          child: Icon(
+            CupertinoIcons.archivebox,
+            color: Colors.deepPurple,
+          ),
+        ),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -67,7 +77,6 @@ class _ComprasPageState extends State<ComprasPage> {
           setState(() {});
         },
         backgroundColor: Colors.deepPurple,
-        // overlayColor: Colors.deepPurple,
         children: [
           SpeedDialChild(
             child: Icon(Icons.contactless_outlined),
@@ -76,6 +85,8 @@ class _ComprasPageState extends State<ComprasPage> {
             labelStyle: TextStyle(fontSize: 18.0),
             onTap: () {
               comprasProvider.realizarCompra();
+              AlertDialogCompraRealizada.showAlertDialog(context);
+              comprasProvider.limpiarLista();
             },
           ),
           SpeedDialChild(
@@ -114,8 +125,12 @@ class _ComprasPageState extends State<ComprasPage> {
     return Table(
       children: [
         TableRow(children: [
-          _contenedorTable(context, size.height * 0.3,
+          _contenedorTable(context, size.height * 0.05,
               _proveedorCajetin(context, comprasProvider))
+        ]),
+        TableRow(children: [
+          _contenedorTable(context, size.height * 0.25,
+              _camaraCajetin(context, comprasProvider))
         ]),
         TableRow(children: [
           _contenedorTable(context, size.height * 0.45,
@@ -152,10 +167,16 @@ class _ComprasPageState extends State<ComprasPage> {
         children: [
           Center(
             child: Text(
-                'ProveedorID: ${proveedorLista.id} - ${proveedorLista.nombre}'),
+                'Proveedor: ${proveedorLista.id} - ${proveedorLista.nombre}'),
           ),
         ],
       ),
+    );
+  }
+
+  _camaraCajetin(BuildContext context, ComprasProvider comprasProvider) {
+    return Center(
+      child: Text('Aqui va la cámara'),
     );
   }
 
@@ -294,7 +315,7 @@ class _ComprasPageState extends State<ComprasPage> {
       context: context,
       initialDate: selectedDate,
       firstDate: DateTime(2021),
-      lastDate: DateTime(2025),
+      lastDate: DateTime(2026),
       borderRadius: 16,
       theme: ThemeData(
         primarySwatch: Colors.deepPurple,

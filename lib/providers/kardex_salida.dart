@@ -21,7 +21,6 @@ class KardexSalidaProvider extends ChangeNotifier {
     final Map<String, dynamic> decodedData = jsonDecode(consulta.body);
 
     if (consulta.statusCode != 200) {
-      print('Status Code: ${consulta.statusCode}');
       return [];
     }
     final List<KardexSalidaModel> listaKardex = [];
@@ -29,8 +28,6 @@ class KardexSalidaProvider extends ChangeNotifier {
       if (key == 'kardex') {
         final List tmp = value;
         tmp.forEach((valor) {
-          print(valor);
-
           listaKardex.add(
             new KardexSalidaModel(
               productoId: valor['Producto']['id'].toString(),

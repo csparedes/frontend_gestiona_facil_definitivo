@@ -49,10 +49,13 @@ class _IngresosPageState extends State<IngresosPage> {
             rows: _getFilas(snapshot.data),
           );
         }
-        return Center(
-            child: CupertinoActivityIndicator(
-          radius: 20,
-        ));
+        return Container(
+            height: MediaQuery.of(context).size.height,
+            child: Center(
+              child: CupertinoActivityIndicator(
+                radius: 20,
+              ),
+            ));
       },
     );
   }

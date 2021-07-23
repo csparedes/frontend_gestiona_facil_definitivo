@@ -172,3 +172,62 @@ class AlertDialogFailEditClienteWidget {
     );
   }
 }
+
+class AlertDialogOkCreateClienteWidget {
+  static showAlertDialog(BuildContext context) {
+    // Create button
+    Widget okButton = CupertinoButton(
+      child: Text("OK"),
+      onPressed: () {
+        Navigator.of(context).pop();
+        Navigator.of(context).pop();
+      },
+    );
+
+    // Create AlertDialog
+    CupertinoAlertDialog alert = CupertinoAlertDialog(
+      title: Text("Cliente Creado"),
+      content: Text("Un cliente nuevo se ha ingresado a la base de datos"),
+      actions: [
+        okButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+}
+
+class AlertDialogFailCreateClienteWidget {
+  static showAlertDialog(BuildContext context) {
+    // Create button
+    Widget okButton = CupertinoButton(
+      child: Text("OK"),
+      onPressed: () {
+        Navigator.of(context).pop();
+      },
+    );
+
+    // Create AlertDialog
+    CupertinoAlertDialog alert = CupertinoAlertDialog(
+      title: Text("Error"),
+      content: Text("No se pudo ingresar el nuevo cliente"),
+      actions: [
+        okButton,
+      ],
+    );
+
+    // show the dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+}

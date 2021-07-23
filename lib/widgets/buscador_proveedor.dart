@@ -124,8 +124,6 @@ class ProveedorSearchDelegate extends SearchDelegate {
                                   email: email);
                               comprasProvider.agregarProveedor = temp;
                               this.close(context, null);
-                              // print(ventasProvider.imprimirLista);
-                              //Agregar Productos a la lista inicial
                             },
                             child: Icon(
                               CupertinoIcons.add,

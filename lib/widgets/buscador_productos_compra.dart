@@ -92,8 +92,6 @@ class ProductosCompraSearchDelegate extends SearchDelegate {
                           );
 
                           comprasProvider.agregarProducto = temp;
-                          // print(ventasProvider.imprimirLista);
-                          //Agregar Productos a la lista inicial
                         },
                         child: Icon(
                           CupertinoIcons.add,

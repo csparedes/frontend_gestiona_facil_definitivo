@@ -77,7 +77,6 @@ class ComprasProvider extends ChangeNotifier {
     final temp =
         listaTemporal.indexWhere((element) => element.codigo == codigo);
 
-    print('temp $temp');
     if (temp != -1) {
       listaTemporal[temp].modificarPrecio(precio);
     }
@@ -123,7 +122,7 @@ class ComprasProvider extends ChangeNotifier {
     listaTemporal.forEach((producto) {
       sum += producto.totalAux;
     });
-    compraTotal = sum;
+    this.compraTotal = sum;
     return sum;
   }
 
@@ -135,7 +134,7 @@ class ComprasProvider extends ChangeNotifier {
   ProveedorModel mostrarProveedro() => this.proveedor;
 
   set agregarComentario(String comment) {
-    comentario = comment;
+    this.comentario = comment;
     notifyListeners();
   }
 
@@ -176,15 +175,42 @@ class ComprasProvider extends ChangeNotifier {
   }
 
   Future<Map<String, dynamic>> realizarCompra() async {
+    double saver = this.compraTotal;
     Map<String, dynamic> compra = {
       "comprobante": await _obtenerUltimoComprobante(),
       "proveedoreId": "${proveedor.id}",
       "fechaCompra": DateTime.now().toString(),
       "comentario": comentario,
-      "totalCompra": compraTotal,
+      "totalCompra": saver,
       "listaProductos": _configurarListaProductos(listaTemporal),
     };
-    print('$compra');
+    final consulta = await http.post(
+      Uri.parse(_url),
+      body: jsonEncode(compra),
+      headers: <String, String>{
+        "Content-Type": "application/json",
+        "x-token": _token
+      },
+    );
+
+    if (consulta.statusCode != 200) {
+      //error
+      return {"ok": false, "msg": "Ha ocurrido un error"};
+    } else {
+      return {"ok": true, "msg": "Ha salido muy bien"};
+    }
+  }
+
+  Future<Map<String, dynamic>> realizarPedido() async {
+    double saver = this.compraTotal;
+    Map<String, dynamic> compra = {
+      "comprobante": await _obtenerUltimoComprobante(),
+      "proveedoreId": "${proveedor.id}",
+      "fechaCompra": DateTime.now().toString(),
+      "comentario": comentario,
+      "totalCompra": saver,
+      "listaProductos": _configurarListaProductos(listaTemporal),
+    };
     final consulta = await http.post(
       Uri.parse(_url),
       body: jsonEncode(compra),

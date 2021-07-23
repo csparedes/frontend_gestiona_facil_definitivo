@@ -1,28 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:gestionafacil_v3/pages/categoria_nueva.dart';
+import 'package:gestionafacil_v3/pages/categorias.dart';
 import 'package:gestionafacil_v3/pages/cliente_nuevo.dart';
 import 'package:gestionafacil_v3/pages/clientes.dart';
 import 'package:gestionafacil_v3/pages/compras.dart';
 import 'package:gestionafacil_v3/pages/compras_comentario.dart';
+import 'package:gestionafacil_v3/pages/consumos_donaciones.dart';
 import 'package:gestionafacil_v3/pages/existencias.dart';
 import 'package:gestionafacil_v3/pages/home.dart';
 import 'package:gestionafacil_v3/pages/ingresos.dart';
+import 'package:gestionafacil_v3/pages/listaPedidos.dart';
+import 'package:gestionafacil_v3/pages/listaPedidos_detalle.dart';
 import 'package:gestionafacil_v3/pages/login.dart';
 import 'package:gestionafacil_v3/pages/producto_nuevo.dart';
 import 'package:gestionafacil_v3/pages/productos.dart';
 import 'package:gestionafacil_v3/pages/proveedores.dart';
 import 'package:gestionafacil_v3/pages/proveedor_nuevo.dart';
+import 'package:gestionafacil_v3/pages/realizarPedido.dart';
 import 'package:gestionafacil_v3/pages/salidas.dart';
 import 'package:gestionafacil_v3/pages/usuario_nuevo.dart';
 import 'package:gestionafacil_v3/pages/usuarios.dart';
 import 'package:gestionafacil_v3/pages/venta_comentario.dart';
 import 'package:gestionafacil_v3/pages/ventas.dart';
+import 'package:gestionafacil_v3/providers/categoria.dart';
 import 'package:gestionafacil_v3/providers/cliente.dart';
 import 'package:gestionafacil_v3/providers/compras.dart';
 import 'package:gestionafacil_v3/providers/kardex_existencias.dart';
 import 'package:gestionafacil_v3/providers/kardex_ingresos.dart';
 import 'package:gestionafacil_v3/providers/kardex_salida.dart';
 import 'package:gestionafacil_v3/providers/login.dart';
+import 'package:gestionafacil_v3/providers/pedidos.dart';
 import 'package:gestionafacil_v3/providers/productos.dart';
 import 'package:gestionafacil_v3/providers/proveedor.dart';
 import 'package:gestionafacil_v3/providers/push_notifications.dart';
@@ -53,11 +61,11 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     PushNotificationsProvider.messagesStream.listen((message) {
       final snackBar = SnackBar(
-        elevation: 40,
+        elevation: 35,
         content: Text(
           '$message',
           style: TextStyle(
-            fontSize: 30,
+            fontSize: 22,
           ),
         ),
         duration: Duration(
@@ -82,13 +90,11 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (_) => ProveedorProvider()),
         ChangeNotifierProvider(create: (_) => VentasProvider()),
         ChangeNotifierProvider(create: (_) => ComprasProvider()),
+        ChangeNotifierProvider(create: (_) => CategoriaProvider()),
+        ChangeNotifierProvider(create: (_) => PedidosProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        supportedLocales: [
-          Locale('es', ''),
-          Locale('en', ''),
-        ],
         title: 'Material App',
         initialRoute: 'login',
         navigatorKey: navigatorKey,
@@ -111,8 +117,13 @@ class _MyAppState extends State<MyApp> {
           'ventasComentario': (_) => VentaComentarioPage(),
           'compras': (_) => ComprasPage(),
           'comprasComentario': (_) => ComprasComentarioPage(),
+          'realizarPedido': (_) => RealizarPedidoPage(),
+          'consumosDonaciones': (_) => ConsumosDonacionesPage(),
+          'categorias': (_) => CategoriasPage(),
+          'categoriaNueva': (_) => CategoriaNuevaPage(),
+          'listaPedidos': (_) => ListaPedidosPage(),
+          'detallePedido': (_) => DetallePedidoPage(),
         },
-        // theme: ThemeData(primaryColor: Colors.deepPurple),
       ),
     );
   }

@@ -3,12 +3,8 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'package:email_validator/email_validator.dart';
-// import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:gestionafacil_v3/providers/login.dart';
 import 'package:gestionafacil_v3/widgets/alerts_dialogs/login.dart';
-
-// import 'package:provider/provider.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -73,15 +69,18 @@ Widget _crearFondo(BuildContext context) {
         padding: EdgeInsets.only(top: 80.0),
         child: Column(
           children: <Widget>[
-            Icon(Icons.person_pin_circle, color: Colors.white, size: 100.0),
-            SizedBox(height: 20.0, width: double.infinity),
+            Image(
+              image: AssetImage('assets/logo-blanco.png'),
+              height: 110,
+            ),
+            SizedBox(height: 28.0, width: double.infinity),
             DefaultTextStyle(
               style: TextStyle(color: Colors.white, fontSize: 25),
               child: AnimatedTextKit(
                 animatedTexts: [
                   WavyAnimatedText('Gestiona Fácil'),
                 ],
-                isRepeatingAnimation: true,
+                repeatForever: true,
               ),
             ),
             // Text('Gestiona Fácil',
@@ -135,7 +134,8 @@ Widget _loginForm(BuildContext context, TextEditingController email,
               style: TextStyle(
                 color: Colors.deepPurple,
               )),
-          onPressed: () {},
+          onPressed: () =>
+              AlertDialogContactoAdministracionWidget.showAlertDialog(context),
         ),
         SizedBox(height: 100.0)
       ],
@@ -165,9 +165,6 @@ Widget _crearEmail(TextEditingController email) {
       ),
       cursorColor: Colors.deepPurple,
       controller: email,
-      onChanged: (value) {
-        print(EmailValidator.validate(value));
-      },
     ),
   );
 }
@@ -221,14 +218,14 @@ _login(BuildContext context, TextEditingController email,
     'password': password.text,
   };
   final Map<String, dynamic> respuesta = await loginProvider.login(data);
-  // print('Estamos en el login');
   if (respuesta['ok']) {
     dotenv.env['USER_ROL'] = respuesta['usuario']['roleId'].toString();
     dotenv.env['TOKEN'] = respuesta['token'];
+
     Navigator.popAndPushNamed(context, 'home');
   } else {
-    // email.clear();
-    // password.clear();
+    email.clear();
+    password.clear();
     AlertDialogLoginWidget.showAlertDialog(context);
   }
 }

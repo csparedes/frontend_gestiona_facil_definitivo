@@ -74,8 +74,11 @@ class _UsuariosPageState extends State<UsuariosPage> {
         }
 
         return Container(
+          height: MediaQuery.of(context).size.height,
           child: Center(
-            child: Text('No hay datos en el snapshot'),
+            child: CupertinoActivityIndicator(
+              radius: 20,
+            ),
           ),
         );
       },

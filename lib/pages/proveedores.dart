@@ -60,8 +60,11 @@ class _ProveedoresPageState extends State<ProveedoresPage> {
           );
         }
         return Container(
-          child: CupertinoActivityIndicator(
-            radius: 20,
+          height: MediaQuery.of(context).size.height,
+          child: Center(
+            child: CupertinoActivityIndicator(
+              radius: 20,
+            ),
           ),
         );
       },
