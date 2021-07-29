@@ -1,13 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:gestionafacil_v3/providers/productos.dart';
+import 'package:gestionafacil_v3/providers/perchar.dart';
 import 'package:provider/provider.dart';
 
-class AlertDialogOkEditProductoWidget {
+class AlertDialogOkEditPercha {
   static showAlertDialog(BuildContext context) {
     // Create button
     Widget okButton = CupertinoButton(
-      child: Text("OK"),
+      child: Text(
+        "OK",
+        style: TextStyle(color: Colors.deepPurple),
+      ),
       onPressed: () {
         Navigator.of(context).pop();
         Navigator.of(context).pop();
@@ -16,8 +19,8 @@ class AlertDialogOkEditProductoWidget {
 
     // Create AlertDialog
     CupertinoAlertDialog alert = CupertinoAlertDialog(
-      title: Text("Producto Actualizado"),
-      content: Text("El producto se ha actualizado"),
+      title: Text("Percha Actualizada"),
+      content: Text("La percha se ha actualizado"),
       actions: [
         okButton,
       ],
@@ -33,12 +36,16 @@ class AlertDialogOkEditProductoWidget {
   }
 }
 
-class AlertDialogFailEditProductoWidget {
-  static showAlertDialog(BuildContext context, String msg) {
+class AlertDialogFailEditPercha {
+  static showAlertDialog(BuildContext context) {
     // Create button
     Widget okButton = CupertinoButton(
-      child: Text("OK"),
+      child: Text(
+        "OK",
+        style: TextStyle(color: Colors.deepPurple),
+      ),
       onPressed: () {
+        Navigator.of(context).pop();
         Navigator.of(context).pop();
       },
     );
@@ -46,7 +53,7 @@ class AlertDialogFailEditProductoWidget {
     // Create AlertDialog
     CupertinoAlertDialog alert = CupertinoAlertDialog(
       title: Text("Error"),
-      content: Text(msg),
+      content: Text("La percha no se pudo actualizar"),
       actions: [
         okButton,
       ],
@@ -62,34 +69,40 @@ class AlertDialogFailEditProductoWidget {
   }
 }
 
-class AlertDialogDeleteProductoWidget {
+class AlertDialogDeletePercha {
   static showAlertDialog(BuildContext context, String cadena) {
     //split de la cadena
     final split = cadena.split('-');
 
-    final nombre = split[1];
-    final codigo = split[4];
+    final id = split[0];
+
     // Create button
     Widget okButton = CupertinoButton(
-      child: Text("OK"),
+      child: Text(
+        "OK",
+        style: TextStyle(color: Colors.deepPurple),
+      ),
       onPressed: () async {
         //Eliminar Usuario
         final productoProvider =
-            Provider.of<ProductosProvider>(context, listen: false);
-        final peticion = await productoProvider.borrarProducto(codigo);
+            Provider.of<PercharProvider>(context, listen: false);
+        final peticion = await productoProvider.borrarPercha(id);
 
         if (peticion['ok']) {
           // AlertDialogOkDeleteUsuarioWidget.showAlertDialog(context);
-          AlertDialogOkDeleteProductoWidget.showAlertDialog(context);
+          AlertDialogOkDeletePercha.showAlertDialog(context);
         } else {
           // AlertDialogFailDeleteUsuarioWidget.showAlertDialog(context);
-          AlertDialogFailDeleteProductoWidget.showAlertDialog(context);
+          AlertDialogFailDeletePercha.showAlertDialog(context);
         }
       },
     );
 
     Widget cancelButton = CupertinoButton(
-      child: Text("Cancelar"),
+      child: Text(
+        "Cancelar",
+        style: TextStyle(color: CupertinoColors.destructiveRed),
+      ),
       onPressed: () => Navigator.pop(context),
     );
 
@@ -99,7 +112,7 @@ class AlertDialogDeleteProductoWidget {
       content: Column(
         children: [
           Text(
-              "¿Esta seguro que desea elimnar a $nombre como Producto del Inventario?"),
+              "¿Esta seguro que desea elimnar el enlace de perchas y artículos?"),
         ],
       ),
       actions: [
@@ -118,11 +131,14 @@ class AlertDialogDeleteProductoWidget {
   }
 }
 
-class AlertDialogOkDeleteProductoWidget {
+class AlertDialogOkDeletePercha {
   static showAlertDialog(BuildContext context) {
     // Create button
     Widget okButton = CupertinoButton(
-      child: Text("OK"),
+      child: Text(
+        "OK",
+        style: TextStyle(color: Colors.deepPurple),
+      ),
       onPressed: () {
         Navigator.of(context).pop();
         Navigator.of(context).pop();
@@ -148,11 +164,14 @@ class AlertDialogOkDeleteProductoWidget {
   }
 }
 
-class AlertDialogFailDeleteProductoWidget {
+class AlertDialogFailDeletePercha {
   static showAlertDialog(BuildContext context) {
     // Create button
     Widget okButton = CupertinoButton(
-      child: Text("OK"),
+      child: Text(
+        "OK",
+        style: TextStyle(color: Colors.deepPurple),
+      ),
       onPressed: () {
         Navigator.of(context).pop();
         Navigator.of(context).pop();
@@ -163,94 +182,6 @@ class AlertDialogFailDeleteProductoWidget {
     CupertinoAlertDialog alert = CupertinoAlertDialog(
       title: Text("Error"),
       content: Text("No se pudo eliminar el usuario"),
-      actions: [
-        okButton,
-      ],
-    );
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
-}
-
-class AlertDialogOkCrearProducto {
-  static showAlertDialog(BuildContext context) {
-    // Create button
-    Widget okButton = CupertinoButton(
-      child: Text("OK"),
-      onPressed: () {
-        Navigator.of(context).pop();
-        Navigator.of(context).pop();
-      },
-    );
-
-    // Create AlertDialog
-    CupertinoAlertDialog alert = CupertinoAlertDialog(
-      title: Text("Producto Creado"),
-      content: Text("Se ha creado un nuevo producto"),
-      actions: [
-        okButton,
-      ],
-    );
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
-}
-
-class AlertDialogFailCrearProducto {
-  static showAlertDialog(BuildContext context, String msg) {
-    // Create button
-    Widget okButton = CupertinoButton(
-      child: Text("OK"),
-      onPressed: () {
-        Navigator.of(context).pop();
-      },
-    );
-
-    // Create AlertDialog
-    CupertinoAlertDialog alert = CupertinoAlertDialog(
-      title: Text("Error"),
-      content: Text(msg),
-      actions: [
-        okButton,
-      ],
-    );
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return alert;
-      },
-    );
-  }
-}
-
-class AlertDialogDatosGenerarCodigoProducto {
-  static showAlertDialog(BuildContext context) {
-    // Create button
-    Widget okButton = CupertinoButton(
-      child: Text(
-        "OK",
-        style: TextStyle(color: Colors.deepPurple),
-      ),
-      onPressed: () {
-        Navigator.of(context).pop();
-      },
-    );
-
-    // Create AlertDialog
-    CupertinoAlertDialog alert = CupertinoAlertDialog(
-      title: Text("Error"),
-      content: Text('Ingrese el nombre y la categoria del producto'),
       actions: [
         okButton,
       ],

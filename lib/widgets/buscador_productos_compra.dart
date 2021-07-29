@@ -8,7 +8,8 @@ import 'package:gestionafacil_v3/providers/productos.dart';
 
 class ProductosCompraSearchDelegate extends SearchDelegate {
   final comprasProvider;
-  ProductosCompraSearchDelegate(this.comprasProvider);
+  final String searchFieldLabel;
+  ProductosCompraSearchDelegate(this.comprasProvider, this.searchFieldLabel);
 
   @override
   List<Widget> buildActions(BuildContext context) {

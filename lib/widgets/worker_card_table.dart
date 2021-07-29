@@ -2,17 +2,17 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 
-class CardTableAdmin extends StatelessWidget {
+class WorkerTableAdmin extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Table(
       children: [
         TableRow(children: [
           _SigleCard(
-            color: Colors.blueAccent,
-            icon: Icons.storefront,
-            text: 'Compras',
-            onTap: () => Navigator.pushNamed(context, 'compras'),
+            color: Colors.orange,
+            icon: Icons.swap_horiz,
+            text: 'Consumos\nDonaciones',
+            onTap: () => Navigator.pushNamed(context, 'consumosDonaciones'),
           ),
           _SigleCard(
             color: Colors.pinkAccent,
@@ -23,21 +23,7 @@ class CardTableAdmin extends StatelessWidget {
         ]),
         TableRow(children: [
           _SigleCard(
-            color: Colors.black,
-            icon: Icons.done,
-            text: 'Realizar Pedido',
-            onTap: () => Navigator.pushNamed(context, 'realizarPedido'),
-          ),
-          _SigleCard(
-            color: Colors.orange,
-            icon: Icons.swap_horiz,
-            text: 'Consumos\nDonaciones',
-            onTap: () => Navigator.pushNamed(context, 'consumosDonaciones'),
-          ),
-        ]),
-        TableRow(children: [
-          _SigleCard(
-            color: Colors.yellowAccent,
+            color: Colors.yellow,
             icon: Icons.drag_indicator_outlined,
             text: 'Lista Productos',
             onTap: () => Navigator.pushNamed(context, 'productos'),
@@ -51,16 +37,16 @@ class CardTableAdmin extends StatelessWidget {
         ]),
         TableRow(children: [
           _SigleCard(
-            color: Colors.teal,
-            icon: Icons.person_pin_outlined,
-            text: 'Proveedores',
-            onTap: () => Navigator.pushNamed(context, 'proveedores'),
-          ),
-          _SigleCard(
             color: Colors.red,
             icon: Icons.group_outlined,
             text: 'Clientes',
             onTap: () => Navigator.pushNamed(context, 'clientes'),
+          ),
+          _SigleCard(
+            color: Colors.lime,
+            icon: Icons.schedule_outlined,
+            text: 'Existencias',
+            onTap: () => Navigator.pushNamed(context, 'existencias'),
           ),
         ]),
         TableRow(children: [
@@ -75,22 +61,6 @@ class CardTableAdmin extends StatelessWidget {
             icon: Icons.store_mall_directory,
             text: 'Salidas',
             onTap: () => Navigator.pushNamed(context, 'salidas'),
-          ),
-        ]),
-        TableRow(children: [
-          _SigleCard(
-            color: Colors.lime,
-            icon: Icons.schedule_outlined,
-            text: 'Existencias',
-            onTap: () => Navigator.pushNamed(context, 'existencias'),
-          ),
-          _SigleCard(
-            color: Colors.black,
-            icon: Icons.perm_identity_outlined,
-            text: 'Usuarios',
-            onTap: () {
-              Navigator.pushNamed(context, 'usuarios');
-            },
           ),
         ]),
       ],

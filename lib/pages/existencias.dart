@@ -46,7 +46,7 @@ class _ExistenciasPageState extends State<ExistenciasPage> {
         if (snapshot.hasData) {
           listaExistencias = snapshot.data;
           return DataTable(
-            columnSpacing: 40,
+            columnSpacing: 30,
             columns: _getColumnas(columnas),
             rows: _getFilas(listaExistencias),
           );
@@ -55,7 +55,7 @@ class _ExistenciasPageState extends State<ExistenciasPage> {
           height: MediaQuery.of(context).size.height,
           child: Center(
               child: CupertinoActivityIndicator(
-            radius: 20,
+            radius: 16,
           )),
         );
       },
@@ -64,7 +64,10 @@ class _ExistenciasPageState extends State<ExistenciasPage> {
 
   _getColumnas(List<String> columnas) => columnas
       .map((String columna) => DataColumn(
-            label: Text(columna),
+            label: Text(
+              columna,
+              style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+            ),
           ))
       .toList();
 
@@ -73,8 +76,8 @@ class _ExistenciasPageState extends State<ExistenciasPage> {
         final cells = [
           kardex.productoString,
           kardex.fechaCaducidad.toString(),
-          kardex.cantidad.toString(),
-          kardex.valorIngreso.toString()
+          kardex.cantidad.toStringAsFixed(2),
+          kardex.valorIngreso.toStringAsFixed(2),
         ];
         return DataRow(cells: _getCeldas(cells));
       }).toList();

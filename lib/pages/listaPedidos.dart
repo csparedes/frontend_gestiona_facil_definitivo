@@ -44,7 +44,7 @@ class _ListaPedidosPageState extends State<ListaPedidosPage> {
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
           return DataTable(
-            columnSpacing: 100,
+            columnSpacing: 80,
             columns: _getColumnas(columnas),
             rows: _getFilas(snapshot.data),
           );

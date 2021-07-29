@@ -54,22 +54,18 @@ class _UsuariosPageState extends State<UsuariosPage> {
 
   _tablaUsuarios() {
     final usuarioProvider = Provider.of<UsuariosProvider>(context);
-    final columnas = ['Nombre', 'Email', 'Rol', ''];
+    // final columnas = ['Nombre', 'Email', 'Rol', ''];
+    final columnas = ['Nombre', 'Rol', 'Acciones'];
     return FutureBuilder(
       future: usuarioProvider.mostrarUsuarios(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
           this.usuarios = snapshot.data;
           return DataTable(
-            decoration: BoxDecoration(
-              color: Colors.deepPurple[50],
-            ),
-            columnSpacing: 8,
-            sortAscending: isAscending,
-            sortColumnIndex: sortIndex,
+            columnSpacing: 40,
             columns: _getColumnas(columnas),
             rows: _getFilas(usuarios),
-            headingRowHeight: 30,
+            // headingRowHeight: 30,
           );
         }
 
@@ -88,8 +84,10 @@ class _UsuariosPageState extends State<UsuariosPage> {
   List<DataColumn> _getColumnas(List<String> columnas) => columnas
       .map(
         (String columna) => DataColumn(
-          label: Text(columna),
-          onSort: onSort,
+          label: Text(
+            columna,
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
         ),
       )
       .toList();
@@ -98,7 +96,7 @@ class _UsuariosPageState extends State<UsuariosPage> {
       usuarios.map((UsuarioModel usuario) {
         final cells = [
           usuario.nombre,
-          usuario.email,
+          // usuario.email,
           usuario.roleId,
           '${usuario.id}-${usuario.nombre}-${usuario.email}-${usuario.roleId}'
         ];
@@ -111,7 +109,13 @@ class _UsuariosPageState extends State<UsuariosPage> {
       .map(
         (dato) => DataCell(
           (!dato.toString().contains('-'))
-              ? Text('$dato')
+              ? Container(
+                  padding: EdgeInsets.symmetric(horizontal: 3),
+                  child: Text(
+                    '$dato',
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                )
               : Container(
                   child: Row(
                     children: [

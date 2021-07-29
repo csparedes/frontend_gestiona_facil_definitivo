@@ -1,5 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:gestionafacil_v3/pages/perchaNueva.dart';
+import 'package:gestionafacil_v3/pages/perchar.dart';
+import 'package:gestionafacil_v3/pages/producto_codigo_generar.dart';
+import 'package:gestionafacil_v3/providers/perchar.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
+
 import 'package:gestionafacil_v3/pages/categoria_nueva.dart';
 import 'package:gestionafacil_v3/pages/categorias.dart';
 import 'package:gestionafacil_v3/pages/cliente_nuevo.dart';
@@ -36,12 +44,16 @@ import 'package:gestionafacil_v3/providers/proveedor.dart';
 import 'package:gestionafacil_v3/providers/push_notifications.dart';
 import 'package:gestionafacil_v3/providers/usuarios.dart';
 import 'package:gestionafacil_v3/providers/ventas.dart';
-import 'package:provider/provider.dart';
 
 void main() async {
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    statusBarColor: Colors.transparent,
+    statusBarIconBrightness: Brightness.light,
+  ));
   await dotenv.load(fileName: ".env");
   WidgetsFlutterBinding.ensureInitialized();
   await PushNotificationsProvider.initializeApp();
+
   runApp(MyApp());
 }
 
@@ -92,6 +104,7 @@ class _MyAppState extends State<MyApp> {
         ChangeNotifierProvider(create: (_) => ComprasProvider()),
         ChangeNotifierProvider(create: (_) => CategoriaProvider()),
         ChangeNotifierProvider(create: (_) => PedidosProvider()),
+        ChangeNotifierProvider(create: (_) => PercharProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -123,7 +136,15 @@ class _MyAppState extends State<MyApp> {
           'categoriaNueva': (_) => CategoriaNuevaPage(),
           'listaPedidos': (_) => ListaPedidosPage(),
           'detallePedido': (_) => DetallePedidoPage(),
+          'generarCodigo': (_) => GenerarCodigoPage(),
+          'perchas': (_) => PercharPage(),
+          'percharNueva': (_) => PerchaNuevaPage(),
         },
+        theme: ThemeData(
+          textTheme: GoogleFonts.nanumGothicTextTheme(
+            Theme.of(context).textTheme,
+          ),
+        ),
       ),
     );
   }

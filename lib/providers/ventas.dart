@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:gestionafacil_v3/widgets/alerts_dialogs/compras.dart';
 import 'package:http/http.dart' as http;
 
 import 'package:gestionafacil_v3/models/cliente.dart';
@@ -31,6 +32,42 @@ class VentasProvider extends ChangeNotifier {
       //ok, aumentar cantidad
       listaTemporal[temp].aumentarCantidad();
     } else {
+      producto.cantidadAux = 1;
+      producto.totalAux = producto.cantidadAux * producto.precioVenta;
+      listaTemporal.add(producto);
+    }
+    notifyListeners();
+  }
+
+  agregarProductoPorCodigo(BuildContext context, String codigo) async {
+    final _urlProductos =
+        '${dotenv.env['BASE_URL']}/api/productos/codigo/$codigo';
+    final consultaProducto = await http.get(
+      Uri.parse(_urlProductos),
+      headers: <String, String>{
+        "Content-Type": "application/json",
+        "x-token": _token
+      },
+    );
+    final decodedProducto = jsonDecode(consultaProducto.body);
+    if (decodedProducto['msg'] == 'No hay producto') {
+      AlertDialogProductoNoEncontrado.showAlertDialog(context);
+      return;
+    }
+    final producto = new ProductoModel(
+        nombre: decodedProducto['producto']['nombre'],
+        categoriumId: decodedProducto['producto']['categoriumId'],
+        codigo: decodedProducto['producto']['codigo'],
+        precioVenta: double.parse(
+            decodedProducto['producto']['precioVenta'].toString()));
+    final temp = listaTemporal
+        .indexWhere((element) => element.codigo == producto.codigo);
+    if (temp != -1) {
+      //ok, aumentar cantidad
+      listaTemporal[temp].aumentarCantidad();
+    } else {
+      producto.cantidadAux = 1;
+      producto.totalAux = producto.cantidadAux * producto.precioVenta;
       listaTemporal.add(producto);
     }
     notifyListeners();

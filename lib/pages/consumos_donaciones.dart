@@ -1,5 +1,7 @@
+import 'package:barcode_scan2/barcode_scan2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:gestionafacil_v3/models/cliente.dart';
 import 'package:gestionafacil_v3/models/producto.dart';
@@ -57,7 +59,8 @@ class _ConsumosDonacionesPageState extends State<ConsumosDonacionesPage> {
       onPress: () {
         showSearch(
           context: context,
-          delegate: ProductosVentaSearchDelegate(ventasProvider),
+          delegate: ProductosVentaSearchDelegate(
+              ventasProvider, 'Nombre del Producto'),
         );
         setState(() {});
       },
@@ -95,11 +98,11 @@ class _ConsumosDonacionesPageState extends State<ConsumosDonacionesPage> {
     return Table(
       children: [
         TableRow(children: [
-          _contenedorTable(context, size.height * 0.05,
+          _contenedorTable(context, size.height * 0.2,
               _clienteCajetin(context, ventasProvider))
         ]),
         TableRow(children: [
-          _contenedorTable(context, size.height * 0.25,
+          _contenedorTable(context, size.height * 0.1,
               _camaraCajetin(context, ventasProvider))
         ]),
         TableRow(children: [
@@ -133,20 +136,78 @@ class _ConsumosDonacionesPageState extends State<ConsumosDonacionesPage> {
 
   _clienteCajetin(BuildContext context, VentasProvider ventasProvider) {
     return SingleChildScrollView(
-      child: Column(
-        children: [
-          Center(
-            child: Text('Donaciones o Consumos'),
-          ),
-        ],
+      child: Padding(
+        padding: EdgeInsets.all(15),
+        child: Table(
+          children: [
+            TableRow(
+              children: [
+                Text(
+                  'Domicilio:',
+                  style: TextStyle(fontSize: 30),
+                ),
+                Center(
+                  heightFactor: 2,
+                  child: Text('${clienteLista.domicilio}'),
+                )
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
 
   _camaraCajetin(BuildContext context, VentasProvider ventasProvider) {
-    return Container(
-      child: Text('Cámara aquí'),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        Center(
+          child: Text(
+            'Buscar productos',
+            style: TextStyle(fontSize: 20),
+          ),
+        ),
+        _escanear(ventasProvider)
+      ],
     );
+  }
+
+  _escanear(VentasProvider ventasProvider) {
+    return ElevatedButton.icon(
+      onPressed: () => _scan(ventasProvider),
+      icon: Icon(Icons.qr_code_2),
+      label: Text('Escanear'),
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all<Color>(Colors.deepPurple),
+      ),
+    );
+  }
+
+  Future<void> _scan(VentasProvider ventasProvider) async {
+    try {
+      final ScanResult result = await BarcodeScanner.scan(
+        options: ScanOptions(
+          strings: {
+            'cancel': 'Cancelar',
+            'flash_on': 'Prender',
+            'flash_off': 'Apagar',
+            'name': 'lol',
+          },
+          android: AndroidOptions(
+            aspectTolerance: 0,
+            useAutoFocus: true,
+          ),
+        ),
+      );
+      setState(() {
+        if (result.rawContent != '') {
+          ventasProvider.agregarProductoPorCodigo(context, result.rawContent);
+        }
+      });
+    } on PlatformException catch (e) {
+      print(e);
+    }
   }
 
   _listaProductos(BuildContext context, VentasProvider ventasProvider) {
@@ -173,8 +234,13 @@ class _ConsumosDonacionesPageState extends State<ConsumosDonacionesPage> {
 
   _sumaLista(BuildContext context, VentasProvider ventasProvider) {
     return Center(
-      child: Text('Total a Cobrar: ' +
-          ventasProvider.obtenerSumaTotal().toStringAsFixed(2)),
+      child: Text(
+        'Total del valor: ' +
+            ventasProvider.obtenerSumaTotal().toStringAsFixed(2),
+        style: TextStyle(
+          fontSize: 20,
+        ),
+      ),
     );
   }
 

@@ -1,5 +1,7 @@
+import 'package:barcode_scan2/barcode_scan2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 import 'package:select_form_field/select_form_field.dart';
 import 'package:gestionafacil_v3/models/producto.dart';
 import 'package:gestionafacil_v3/providers/categoria.dart';
@@ -16,7 +18,7 @@ class ProductoNuevoPage extends StatefulWidget {
 
 class _ProductoNuevoPageState extends State<ProductoNuevoPage> {
   final formKey = GlobalKey<FormState>();
-
+  final codigoController = new TextEditingController(text: 'Sin código');
   ProductoModel producto = new ProductoModel(
     id: '',
     nombre: '',
@@ -61,9 +63,11 @@ class _ProductoNuevoPageState extends State<ProductoNuevoPage> {
                 SizedBox(height: 5),
                 _categoria(context, producto.categoriumId),
                 SizedBox(height: 5),
+                _precioVenta(producto.precioVenta),
+                SizedBox(height: 15),
                 _codigo(producto.codigo),
                 SizedBox(height: 5),
-                _precioVenta(producto.precioVenta),
+                _escanear(),
                 SizedBox(height: 15),
                 _botonEditar(context),
               ],
@@ -91,6 +95,7 @@ class _ProductoNuevoPageState extends State<ProductoNuevoPage> {
         ),
       ),
       onSaved: (value) => producto.nombre = value.toString(),
+      onChanged: (value) => producto.nombre = value.toString(),
     );
   }
 
@@ -111,15 +116,18 @@ class _ProductoNuevoPageState extends State<ProductoNuevoPage> {
             labelText: 'Categoría',
             hintText: 'Seleccione la categoría',
             onSaved: (value) => producto.categoriumId = value.toString(),
+            onChanged: (value) => producto.categoriumId = value.toString(),
             items: _items,
           );
         });
   }
 
   _codigo(String codigo) {
-    //TODO: Para finalizar, se reemplaza con la detección de codigos de barras
+    if (codigo != '') {
+      codigoController.text = codigo;
+    }
     return TextFormField(
-      initialValue: (codigo == '') ? null : codigo,
+      controller: codigoController,
       keyboardType: TextInputType.number,
       decoration: InputDecoration(
         icon: Icon(Icons.horizontal_split_outlined, color: Colors.deepPurple),
@@ -133,7 +141,34 @@ class _ProductoNuevoPageState extends State<ProductoNuevoPage> {
           borderSide: BorderSide(color: Colors.deepPurple),
         ),
       ),
+      enabled: false,
       onSaved: (value) => producto.codigo = value.toString(),
+    );
+  }
+
+  _generar() {
+    final codigoGenerado = '${producto.categoriumId} ${producto.nombre}';
+    return ElevatedButton.icon(
+      onPressed: () => (producto.nombre == '' || producto.categoriumId == '')
+          ? AlertDialogDatosGenerarCodigoProducto.showAlertDialog(context)
+          : Navigator.pushNamed(context, 'generarCodigo',
+              arguments: codigoGenerado),
+      icon: Icon(Icons.upload_file_outlined),
+      label: Text('Generar Código'),
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all<Color>(Colors.deepPurple),
+      ),
+    );
+  }
+
+  _escanear() {
+    return ElevatedButton.icon(
+      onPressed: () => _scan(),
+      icon: Icon(Icons.qr_code_2),
+      label: Text('Escanear'),
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all<Color>(Colors.deepPurple),
+      ),
     );
   }
 
@@ -213,9 +248,17 @@ class _ProductoNuevoPageState extends State<ProductoNuevoPage> {
                 SizedBox(height: 5),
                 _categoria(context, producto.categoriumId),
                 SizedBox(height: 5),
+                _precioVenta(producto.precioVenta),
+                SizedBox(height: 15),
                 _codigo(producto.codigo),
                 SizedBox(height: 5),
-                _precioVenta(producto.precioVenta),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    _generar(),
+                    _escanear(),
+                  ],
+                ),
                 SizedBox(height: 15),
                 _botonCrear(context),
               ],
@@ -256,6 +299,32 @@ class _ProductoNuevoPageState extends State<ProductoNuevoPage> {
       AlertDialogOkCrearProducto.showAlertDialog(context);
     } else {
       AlertDialogFailCrearProducto.showAlertDialog(context, peticion['msg']);
+    }
+  }
+
+  Future<void> _scan() async {
+    print('entro al scan');
+    try {
+      final ScanResult result = await BarcodeScanner.scan(
+        options: ScanOptions(
+          strings: {
+            'cancel': 'Cancelar',
+            'flash_on': 'Prender',
+            'flash_off': 'Apagar',
+            'name': 'lol',
+          },
+          android: AndroidOptions(
+            aspectTolerance: 0,
+            useAutoFocus: true,
+          ),
+        ),
+      );
+      setState(() {
+        print('lol ' + result.rawContent);
+        codigoController.text = result.rawContent;
+      });
+    } on PlatformException catch (e) {
+      print(e);
     }
   }
 }

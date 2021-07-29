@@ -1,5 +1,7 @@
+import 'package:barcode_scan2/barcode_scan2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_rounded_date_picker/flutter_rounded_date_picker.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:gestionafacil_v3/models/producto.dart';
@@ -66,20 +68,22 @@ class _ComprasPageState extends State<ComprasPage> {
   SpeedDial _botonSpeedDial(ComprasProvider comprasProvider) {
     return SpeedDial(
         icon: Icons.add,
+        iconTheme: IconThemeData(color: Colors.white),
         buttonSize: 56,
         visible: true,
         curve: Curves.bounceIn,
         onPress: () {
           showSearch(
             context: context,
-            delegate: ProductosCompraSearchDelegate(comprasProvider),
+            delegate: ProductosCompraSearchDelegate(
+                comprasProvider, 'Nombre del Producto'),
           );
           setState(() {});
         },
         backgroundColor: Colors.deepPurple,
         children: [
           SpeedDialChild(
-            child: Icon(Icons.contactless_outlined),
+            child: Icon(Icons.contactless_outlined, color: Colors.white),
             backgroundColor: Colors.green,
             label: 'Comprar',
             labelStyle: TextStyle(fontSize: 18.0),
@@ -90,14 +94,14 @@ class _ComprasPageState extends State<ComprasPage> {
             },
           ),
           SpeedDialChild(
-            child: Icon(Icons.clear_all),
+            child: Icon(Icons.clear_all, color: Colors.white),
             backgroundColor: Colors.red,
             label: 'Limpiar',
             labelStyle: TextStyle(fontSize: 18.0),
             onTap: () => comprasProvider.limpiarLista(),
           ),
           SpeedDialChild(
-            child: Icon(Icons.person_add_alt_1_outlined),
+            child: Icon(Icons.person_add_alt_1_outlined, color: Colors.white),
             backgroundColor: Colors.blue,
             label: 'Agregar Proveedor',
             labelStyle: TextStyle(fontSize: 18.0),
@@ -111,7 +115,7 @@ class _ComprasPageState extends State<ComprasPage> {
             },
           ),
           SpeedDialChild(
-            child: Icon(Icons.wrap_text),
+            child: Icon(Icons.wrap_text, color: Colors.white),
             backgroundColor: Colors.orange,
             label: 'Agregar Comentario',
             labelStyle: TextStyle(fontSize: 18.0),
@@ -125,11 +129,11 @@ class _ComprasPageState extends State<ComprasPage> {
     return Table(
       children: [
         TableRow(children: [
-          _contenedorTable(context, size.height * 0.05,
+          _contenedorTable(context, size.height * 0.2,
               _proveedorCajetin(context, comprasProvider))
         ]),
         TableRow(children: [
-          _contenedorTable(context, size.height * 0.25,
+          _contenedorTable(context, size.height * 0.1,
               _camaraCajetin(context, comprasProvider))
         ]),
         TableRow(children: [
@@ -163,21 +167,108 @@ class _ComprasPageState extends State<ComprasPage> {
 
   _proveedorCajetin(BuildContext context, ComprasProvider comprasProvider) {
     return SingleChildScrollView(
-      child: Column(
-        children: [
-          Center(
-            child: Text(
-                'Proveedor: ${proveedorLista.id} - ${proveedorLista.nombre}'),
-          ),
-        ],
+      child: Padding(
+        padding: EdgeInsets.all(15),
+        child: Table(
+          children: [
+            TableRow(
+              children: [
+                Text(
+                  'Proveedor:',
+                  style: TextStyle(fontSize: 30),
+                ),
+                Center(
+                  heightFactor: 2,
+                  child: Text(
+                    '${proveedorLista.nombre}',
+                    style: TextStyle(fontSize: 15),
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+              ],
+            ),
+            TableRow(
+              children: [
+                Text(
+                  'RUC:',
+                  style: TextStyle(fontSize: 30),
+                ),
+                Center(
+                  heightFactor: 2,
+                  child: Text('${proveedorLista.identificacion}'),
+                )
+              ],
+            ),
+            TableRow(
+              children: [
+                Text(
+                  'Ubicación:',
+                  style: TextStyle(fontSize: 30),
+                ),
+                Center(
+                  heightFactor: 2,
+                  child: Text('${proveedorLista.domicilio}'),
+                )
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
 
   _camaraCajetin(BuildContext context, ComprasProvider comprasProvider) {
-    return Center(
-      child: Text('Aqui va la cámara'),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        Center(
+          child: Text(
+            'Buscar productos',
+            style: TextStyle(fontSize: 20),
+          ),
+        ),
+        _escanear(comprasProvider)
+      ],
     );
+  }
+
+  _escanear(ComprasProvider ventasProvider) {
+    return ElevatedButton.icon(
+      onPressed: () => _scan(ventasProvider),
+      icon: Icon(Icons.qr_code_2),
+      label: Text(
+        'Escanear',
+        style: TextStyle(fontSize: 20),
+      ),
+      style: ButtonStyle(
+        backgroundColor: MaterialStateProperty.all<Color>(Colors.deepPurple),
+      ),
+    );
+  }
+
+  Future<void> _scan(ComprasProvider comprasProvider) async {
+    try {
+      final ScanResult result = await BarcodeScanner.scan(
+        options: ScanOptions(
+          strings: {
+            'cancel': 'Cancelar',
+            'flash_on': 'Prender',
+            'flash_off': 'Apagar',
+          },
+          android: AndroidOptions(
+            aspectTolerance: 0,
+            useAutoFocus: true,
+          ),
+        ),
+      );
+      setState(() {
+        if (result.rawContent != '') {
+          comprasProvider.agregarProductoPorCodigo(context, result.rawContent);
+        }
+      });
+    } on PlatformException catch (e) {
+      print(e.toString());
+    }
   }
 
   _listaProductos(BuildContext context, ComprasProvider comprasProvider) {
@@ -204,8 +295,13 @@ class _ComprasPageState extends State<ComprasPage> {
 
   _sumaLista(BuildContext context, ComprasProvider comprasProvider) {
     return Center(
-      child: Text('Total a Pagar: ' +
-          comprasProvider.obtenerSumaTotal().toStringAsFixed(2)),
+      child: Text(
+        'Total a Pagar: ' +
+            comprasProvider.obtenerSumaTotal().toStringAsFixed(2),
+        style: TextStyle(
+          fontSize: 20,
+        ),
+      ),
     );
   }
 

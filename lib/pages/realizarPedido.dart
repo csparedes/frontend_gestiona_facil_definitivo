@@ -60,7 +60,8 @@ class _RealizarPedidoPageState extends State<RealizarPedidoPage> {
         onPress: () {
           showSearch(
             context: context,
-            delegate: ProductosCompraSearchDelegate(comprasProvider),
+            delegate: ProductosCompraSearchDelegate(
+                comprasProvider, 'Nombre del Producto'),
           );
           setState(() {});
         },

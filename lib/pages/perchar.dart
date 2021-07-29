@@ -1,20 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:gestionafacil_v3/models/producto.dart';
-import 'package:gestionafacil_v3/providers/productos.dart';
-import 'package:gestionafacil_v3/widgets/alerts_dialogs/productos.dart';
+import 'package:gestionafacil_v3/models/percha.dart';
+import 'package:gestionafacil_v3/providers/perchar.dart';
+import 'package:gestionafacil_v3/widgets/alerts_dialogs/perchas.dart';
 import 'package:provider/provider.dart';
 
-class ProductosPage extends StatefulWidget {
-  const ProductosPage({Key? key}) : super(key: key);
+class PercharPage extends StatefulWidget {
+  const PercharPage({Key? key}) : super(key: key);
 
   @override
-  _ProductosPageState createState() => _ProductosPageState();
+  _PercharPageState createState() => _PercharPageState();
 }
 
-class _ProductosPageState extends State<ProductosPage> {
-  List<ProductoModel> listaProductos = [];
-
+class _PercharPageState extends State<PercharPage> {
+  List<PerchaModel> listaPerchas = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,11 +22,9 @@ class _ProductosPageState extends State<ProductosPage> {
           onPressed: () => Navigator.pop(context),
           color: Colors.deepPurple,
         ),
-        middle: Text('Productos'),
+        middle: Text('Perchar Productos'),
         trailing: GestureDetector(
-          onTap: () {
-            Navigator.pushNamed(context, 'productoNuevo');
-          },
+          onTap: () {},
           child: Icon(
             CupertinoIcons.add,
             color: Colors.deepPurple,
@@ -35,31 +32,31 @@ class _ProductosPageState extends State<ProductosPage> {
         ),
         border: Border(bottom: BorderSide(width: 1)),
       ),
-      body: _listaProductos(context),
+      body: _listaPerchas(context),
     );
   }
 
-  _listaProductos(BuildContext context) {
+  _listaPerchas(BuildContext context) {
     return Container(
       child: SingleChildScrollView(
-        child: _tablaProductos(context),
+        child: _tablaPerchas(context),
       ),
     );
   }
 
-  _tablaProductos(BuildContext context) {
-    final productoProvider = Provider.of<ProductosProvider>(context);
-    final columnas = ['Producto', 'Precio', 'Categoria', 'Acciones'];
+  _tablaPerchas(BuildContext context) {
+    final productoProvider = Provider.of<PercharProvider>(context);
+    final columnas = ['Caja', 'Artículo', 'Acciones'];
 
     return FutureBuilder(
-      future: productoProvider.mostrarTodosLosProductos(),
+      future: productoProvider.mostrarEnlacesPerchas(),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
-          listaProductos = snapshot.data;
+          listaPerchas = snapshot.data;
           return DataTable(
             columnSpacing: 30,
             columns: _getColumnas(columnas),
-            rows: _getFilas(listaProductos),
+            rows: _getFilas(listaPerchas),
           );
         }
         return Container(
@@ -83,13 +80,11 @@ class _ProductosPageState extends State<ProductosPage> {
           ))
       .toList();
 
-  _getFilas(List<ProductoModel> productos) =>
-      productos.map((ProductoModel producto) {
+  _getFilas(List<PerchaModel> perchas) => perchas.map((PerchaModel percha) {
         final cells = [
-          producto.nombre,
-          producto.precioVenta.toStringAsFixed(2),
-          producto.categoriumString,
-          '${producto.id}-${producto.nombre}-${producto.precioVenta}-${producto.categoriumId}-${producto.codigo}'
+          percha.cajaId,
+          percha.articuloId,
+          '${percha.id}-${percha.cajaId}-${percha.articuloId}'
         ];
         return DataRow(cells: _getCeldas(cells));
       }).toList();
@@ -104,7 +99,7 @@ class _ProductosPageState extends State<ProductosPage> {
                     children: [
                       GestureDetector(
                         onTap: () => Navigator.pushNamed(
-                            context, 'productoNuevo',
+                            context, 'percharNueva',
                             arguments: dato),
                         child: Icon(
                           Icons.create_outlined,
@@ -116,9 +111,8 @@ class _ProductosPageState extends State<ProductosPage> {
                         width: 4,
                       ),
                       GestureDetector(
-                        onTap: () =>
-                            AlertDialogDeleteProductoWidget.showAlertDialog(
-                                context, dato),
+                        onTap: () => AlertDialogDeletePercha.showAlertDialog(
+                            context, dato),
                         child: Icon(
                           Icons.delete_forever,
                           color: Colors.redAccent,
