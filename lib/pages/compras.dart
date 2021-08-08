@@ -175,10 +175,10 @@ class _ComprasPageState extends State<ComprasPage> {
               children: [
                 Text(
                   'Proveedor:',
-                  style: TextStyle(fontSize: 30),
+                  style: TextStyle(fontSize: 20),
                 ),
                 Center(
-                  heightFactor: 2,
+                  // heightFactor: 2,
                   child: Text(
                     '${proveedorLista.nombre}',
                     style: TextStyle(fontSize: 15),
@@ -191,7 +191,7 @@ class _ComprasPageState extends State<ComprasPage> {
               children: [
                 Text(
                   'RUC:',
-                  style: TextStyle(fontSize: 30),
+                  style: TextStyle(fontSize: 20),
                 ),
                 Center(
                   heightFactor: 2,
@@ -203,7 +203,7 @@ class _ComprasPageState extends State<ComprasPage> {
               children: [
                 Text(
                   'Ubicación:',
-                  style: TextStyle(fontSize: 30),
+                  style: TextStyle(fontSize: 20),
                 ),
                 Center(
                   heightFactor: 2,

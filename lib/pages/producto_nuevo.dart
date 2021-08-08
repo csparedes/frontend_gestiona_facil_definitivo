@@ -2,6 +2,7 @@ import 'package:barcode_scan2/barcode_scan2.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
+import 'package:gestionafacil_v3/widgets/alerts_dialogs/productos_codigo_barras.dart';
 import 'package:select_form_field/select_form_field.dart';
 import 'package:gestionafacil_v3/models/producto.dart';
 import 'package:gestionafacil_v3/providers/categoria.dart';
@@ -95,7 +96,10 @@ class _ProductoNuevoPageState extends State<ProductoNuevoPage> {
         ),
       ),
       onSaved: (value) => producto.nombre = value.toString(),
-      onChanged: (value) => producto.nombre = value.toString(),
+      onChanged: (value) {
+        producto.nombre = value.toString();
+        print(':::producto->' + producto.nombre);
+      },
     );
   }
 
@@ -147,12 +151,20 @@ class _ProductoNuevoPageState extends State<ProductoNuevoPage> {
   }
 
   _generar() {
-    final codigoGenerado = '${producto.categoriumId} ${producto.nombre}';
     return ElevatedButton.icon(
-      onPressed: () => (producto.nombre == '' || producto.categoriumId == '')
-          ? AlertDialogDatosGenerarCodigoProducto.showAlertDialog(context)
-          : Navigator.pushNamed(context, 'generarCodigo',
-              arguments: codigoGenerado),
+      onPressed: () {
+        if (producto.nombre == '' || producto.categoriumId == '') {
+          AlertDialogDatosGenerarCodigoProducto.showAlertDialog(context);
+        } else {
+          String codigoGenerado = '${producto.categoriumId} ${producto.nombre}';
+          print(':::CodigoGenerado' + codigoGenerado);
+          AlertDialogProductoCodigoBarras.showAlertDialog(
+              context, codigoGenerado, producto);
+          setState(() {
+            producto.codigo = codigoGenerado;
+          });
+        }
+      },
       icon: Icon(Icons.upload_file_outlined),
       label: Text('Generar Código'),
       style: ButtonStyle(

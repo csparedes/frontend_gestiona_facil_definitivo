@@ -54,6 +54,7 @@ class _RealizarPedidoPageState extends State<RealizarPedidoPage> {
   SpeedDial _botonSpeedDial(ComprasProvider comprasProvider) {
     return SpeedDial(
         icon: Icons.add,
+        iconTheme: IconThemeData(color: Colors.white),
         buttonSize: 56,
         visible: true,
         curve: Curves.bounceIn,
@@ -69,7 +70,7 @@ class _RealizarPedidoPageState extends State<RealizarPedidoPage> {
         // overlayColor: Colors.deepPurple,
         children: [
           SpeedDialChild(
-            child: Icon(Icons.contactless_outlined),
+            child: Icon(Icons.contactless_outlined, color: Colors.white),
             backgroundColor: Colors.green,
             label: 'Realizar Pedido',
             labelStyle: TextStyle(fontSize: 18.0),
@@ -78,14 +79,20 @@ class _RealizarPedidoPageState extends State<RealizarPedidoPage> {
             },
           ),
           SpeedDialChild(
-            child: Icon(Icons.clear_all),
+            child: Icon(
+              Icons.clear_all,
+              color: Colors.white,
+            ),
             backgroundColor: Colors.red,
             label: 'Limpiar',
             labelStyle: TextStyle(fontSize: 18.0),
             onTap: () => comprasProvider.limpiarLista(),
           ),
           SpeedDialChild(
-            child: Icon(Icons.person_add_alt_1_outlined),
+            child: Icon(
+              Icons.person_add_alt_1_outlined,
+              color: Colors.white,
+            ),
             backgroundColor: Colors.blue,
             label: 'Agregar Proveedor',
             labelStyle: TextStyle(fontSize: 18.0),
@@ -99,7 +106,10 @@ class _RealizarPedidoPageState extends State<RealizarPedidoPage> {
             },
           ),
           SpeedDialChild(
-            child: Icon(Icons.wrap_text),
+            child: Icon(
+              Icons.wrap_text,
+              color: Colors.white,
+            ),
             backgroundColor: Colors.orange,
             label: 'Agregar Comentario',
             labelStyle: TextStyle(fontSize: 18.0),
@@ -113,11 +123,11 @@ class _RealizarPedidoPageState extends State<RealizarPedidoPage> {
     return Table(
       children: [
         TableRow(children: [
-          _contenedorTable(context, size.height * 0.05,
+          _contenedorTable(context, size.height * 0.09,
               _proveedorCajetin(context, comprasProvider))
         ]),
         TableRow(children: [
-          _contenedorTable(context, size.height * 0.7,
+          _contenedorTable(context, size.height * 0.66,
               _listaProductos(context, comprasProvider))
         ]),
         TableRow(children: [
@@ -148,10 +158,14 @@ class _RealizarPedidoPageState extends State<RealizarPedidoPage> {
   _proveedorCajetin(BuildContext context, ComprasProvider comprasProvider) {
     return SingleChildScrollView(
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Center(
             child: Text(
-                'ProveedorID: ${proveedorLista.id} - ${proveedorLista.nombre}'),
+              'Proveedor: ${proveedorLista.nombre}',
+              style: TextStyle(fontSize: 20),
+            ),
           ),
         ],
       ),

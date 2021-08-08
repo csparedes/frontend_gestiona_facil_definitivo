@@ -12,7 +12,10 @@ class AlertDialogDeleteClienteWidget {
 
     // Create button
     Widget okButton = CupertinoButton(
-      child: Text("OK"),
+      child: Text(
+        "OK",
+        style: TextStyle(color: Colors.deepPurple),
+      ),
       onPressed: () async {
         //Eliminar Usuario
         final usuarioProvider =
@@ -20,12 +23,16 @@ class AlertDialogDeleteClienteWidget {
         final peticion = await usuarioProvider.borrarCliente(identificacion);
 
         if (peticion['ok']) {
+          Navigator.pop(context);
         } else {}
       },
     );
 
     Widget cancelButton = CupertinoButton(
-      child: Text("Cancelar"),
+      child: Text(
+        "Cancelar",
+        style: TextStyle(color: CupertinoColors.destructiveRed),
+      ),
       onPressed: () => Navigator.pop(context),
     );
 
@@ -58,7 +65,10 @@ class AlertDialogOkDeleteClienteWidget {
   static showAlertDialog(BuildContext context) {
     // Create button
     Widget okButton = CupertinoButton(
-      child: Text("OK"),
+      child: Text(
+        "OK",
+        style: TextStyle(color: Colors.deepPurple),
+      ),
       onPressed: () {
         Navigator.of(context).pop();
         Navigator.of(context).pop();
@@ -88,7 +98,10 @@ class AlertDialogFailDeleteClienteWidget {
   static showAlertDialog(BuildContext context) {
     // Create button
     Widget okButton = CupertinoButton(
-      child: Text("OK"),
+      child: Text(
+        "OK",
+        style: TextStyle(color: Colors.deepPurple),
+      ),
       onPressed: () {
         Navigator.of(context).pop();
         Navigator.of(context).pop();
@@ -118,7 +131,10 @@ class AlertDialogOkEditClienteWidget {
   static showAlertDialog(BuildContext context) {
     // Create button
     Widget okButton = CupertinoButton(
-      child: Text("OK"),
+      child: Text(
+        "OK",
+        style: TextStyle(color: Colors.deepPurple),
+      ),
       onPressed: () {
         Navigator.of(context).pop();
         Navigator.of(context).pop();
@@ -148,7 +164,10 @@ class AlertDialogFailEditClienteWidget {
   static showAlertDialog(BuildContext context) {
     // Create button
     Widget okButton = CupertinoButton(
-      child: Text("OK"),
+      child: Text(
+        "OK",
+        style: TextStyle(color: Colors.deepPurple),
+      ),
       onPressed: () {
         Navigator.of(context).pop();
       },
@@ -177,7 +196,10 @@ class AlertDialogOkCreateClienteWidget {
   static showAlertDialog(BuildContext context) {
     // Create button
     Widget okButton = CupertinoButton(
-      child: Text("OK"),
+      child: Text(
+        "OK",
+        style: TextStyle(color: Colors.deepPurple),
+      ),
       onPressed: () {
         Navigator.of(context).pop();
         Navigator.of(context).pop();
@@ -207,7 +229,10 @@ class AlertDialogFailCreateClienteWidget {
   static showAlertDialog(BuildContext context) {
     // Create button
     Widget okButton = CupertinoButton(
-      child: Text("OK"),
+      child: Text(
+        "OK",
+        style: TextStyle(color: Colors.deepPurple),
+      ),
       onPressed: () {
         Navigator.of(context).pop();
       },

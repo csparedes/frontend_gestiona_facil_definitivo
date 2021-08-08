@@ -5,7 +5,10 @@ class AlertDialogLoginWidget {
   static showAlertDialog(BuildContext context) {
     // Create button
     Widget okButton = CupertinoButton(
-      child: Text("OK"),
+      child: Text(
+        "OK",
+        style: TextStyle(color: Colors.deepPurple),
+      ),
       onPressed: () {
         Navigator.of(context).pop();
       },
@@ -34,7 +37,10 @@ class AlertDialogContactoAdministracionWidget {
   static showAlertDialog(BuildContext context) {
     // Create button
     Widget okButton = CupertinoButton(
-      child: Text("OK"),
+      child: Text(
+        "OK",
+        style: TextStyle(color: Colors.deepPurple),
+      ),
       onPressed: () {
         Navigator.of(context).pop();
       },
@@ -49,6 +55,7 @@ class AlertDialogContactoAdministracionWidget {
           Text("Ciudad: Tulcán"),
           Text("Tarqui 3-73 y Sucre"),
           Text("Frente a la plazoleta del Mercado San Miguel"),
+          Text("Celular administrador: 0982617951")
         ],
       ),
       actions: [

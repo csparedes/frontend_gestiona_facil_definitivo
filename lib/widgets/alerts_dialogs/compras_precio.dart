@@ -7,7 +7,10 @@ class AlertDialogEditarPrecioCompra {
       BuildContext context, ComprasProvider comprasProvider, String codigo) {
     String precio = '0.00';
     Widget okButton = CupertinoButton(
-      child: Text('Ok'),
+      child: Text(
+        'Ok',
+        style: TextStyle(color: Colors.deepPurple),
+      ),
       onPressed: () {
         comprasProvider.modificarPrecio(codigo, precio);
         Navigator.pop(context);
@@ -15,7 +18,12 @@ class AlertDialogEditarPrecioCompra {
     );
 
     Widget cancelButton = CupertinoButton(
-        child: Text('Cancelar'), onPressed: () => Navigator.pop(context));
+      child: Text(
+        'Cancelar',
+        style: TextStyle(color: CupertinoColors.destructiveRed),
+      ),
+      onPressed: () => Navigator.pop(context),
+    );
 
     CupertinoAlertDialog alert = CupertinoAlertDialog(
       title: Text('Modificar precio de compra'),
@@ -48,7 +56,10 @@ class AlertDialogEditarCantidadCompra {
       BuildContext context, ComprasProvider comprasProvider, String codigo) {
     String cantidad = '0.00';
     Widget okButton = CupertinoButton(
-      child: Text('Ok'),
+      child: Text(
+        'Ok',
+        style: TextStyle(color: Colors.deepPurple),
+      ),
       onPressed: () {
         comprasProvider.modificarCantidad(codigo, cantidad);
         Navigator.pop(context);
@@ -56,7 +67,12 @@ class AlertDialogEditarCantidadCompra {
     );
 
     Widget cancelButton = CupertinoButton(
-        child: Text('Cancelar'), onPressed: () => Navigator.pop(context));
+      child: Text(
+        'Cancelar',
+        style: TextStyle(color: CupertinoColors.destructiveRed),
+      ),
+      onPressed: () => Navigator.pop(context),
+    );
 
     CupertinoAlertDialog alert = CupertinoAlertDialog(
       title: Text('Modificar cantidad de compra'),

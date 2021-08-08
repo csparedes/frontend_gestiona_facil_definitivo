@@ -7,7 +7,10 @@ class AlertDialogUsuarioCreado {
   static showAlertDialog(BuildContext context, String nombre) {
     // Create button
     Widget okButton = CupertinoButton(
-      child: Text("OK"),
+      child: Text(
+        "OK",
+        style: TextStyle(color: Colors.deepPurple),
+      ),
       onPressed: () {
         Navigator.of(context).pop();
         Navigator.of(context).pop();
@@ -37,7 +40,10 @@ class AlertDialogUsuarioCreadoFail {
   static showAlertDialog(BuildContext context, String msg) {
     // Create button
     Widget okButton = CupertinoButton(
-      child: Text("OK"),
+      child: Text(
+        "OK",
+        style: TextStyle(color: Colors.deepPurple),
+      ),
       onPressed: () {
         Navigator.of(context).pop();
       },
@@ -71,7 +77,10 @@ class AlertDialogDeleteUsuario {
 
     // Create button
     Widget okButton = CupertinoButton(
-      child: Text("OK"),
+      child: Text(
+        "OK",
+        style: TextStyle(color: Colors.deepPurple),
+      ),
       onPressed: () async {
         //Eliminar Usuario
         final usuarioProvider =
@@ -87,7 +96,10 @@ class AlertDialogDeleteUsuario {
     );
 
     Widget cancelButton = CupertinoButton(
-      child: Text("Cancelar"),
+      child: Text(
+        "Cancelar",
+        style: TextStyle(color: CupertinoColors.destructiveRed),
+      ),
       onPressed: () => Navigator.pop(context),
     );
 
@@ -120,7 +132,10 @@ class AlertDialogOkEditUsuarioWidget {
   static showAlertDialog(BuildContext context) {
     // Create button
     Widget okButton = CupertinoButton(
-      child: Text("OK"),
+      child: Text(
+        "OK",
+        style: TextStyle(color: Colors.deepPurple),
+      ),
       onPressed: () {
         Navigator.of(context).pop();
         Navigator.of(context).pop();
@@ -150,7 +165,10 @@ class AlertDialogFailEditUsuarioWidget {
   static showAlertDialog(BuildContext context) {
     // Create button
     Widget okButton = CupertinoButton(
-      child: Text("OK"),
+      child: Text(
+        "OK",
+        style: TextStyle(color: Colors.deepPurple),
+      ),
       onPressed: () {
         Navigator.of(context).pop();
       },
@@ -179,7 +197,10 @@ class AlertDialogDeleteUsuarioOk {
   static showAlertDialog(BuildContext context) {
     // Create button
     Widget okButton = CupertinoButton(
-      child: Text("OK"),
+      child: Text(
+        "OK",
+        style: TextStyle(color: Colors.deepPurple),
+      ),
       onPressed: () {
         Navigator.of(context).pop();
         Navigator.of(context).pop();
@@ -209,7 +230,10 @@ class AlertDialogDeleteUsuarioFail {
   static showAlertDialog(BuildContext context) {
     // Create button
     Widget okButton = CupertinoButton(
-      child: Text("OK"),
+      child: Text(
+        "OK",
+        style: TextStyle(color: Colors.deepPurple),
+      ),
       onPressed: () {
         Navigator.of(context).pop();
         Navigator.of(context).pop();

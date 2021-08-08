@@ -55,6 +55,7 @@ class _VentasPageState extends State<VentasPage> {
   SpeedDial _botonSpeedDial(VentasProvider ventasProvider) {
     return SpeedDial(
         icon: Icons.add,
+        iconTheme: IconThemeData(color: Colors.white),
         buttonSize: 56,
         visible: true,
         curve: Curves.bounceIn,
@@ -70,7 +71,10 @@ class _VentasPageState extends State<VentasPage> {
         // overlayColor: Colors.deepPurple,
         children: [
           SpeedDialChild(
-            child: Icon(Icons.contactless_outlined),
+            child: Icon(
+              Icons.contactless_outlined,
+              color: Colors.white,
+            ),
             backgroundColor: Colors.green,
             label: 'Vender',
             labelStyle: TextStyle(fontSize: 18.0),
@@ -81,14 +85,20 @@ class _VentasPageState extends State<VentasPage> {
             },
           ),
           SpeedDialChild(
-            child: Icon(Icons.clear_all),
+            child: Icon(
+              Icons.clear_all,
+              color: Colors.white,
+            ),
             backgroundColor: Colors.red,
             label: 'Limpiar',
             labelStyle: TextStyle(fontSize: 18.0),
             onTap: () => ventasProvider.limpiarLista(),
           ),
           SpeedDialChild(
-            child: Icon(Icons.person_add_alt_1_outlined),
+            child: Icon(
+              Icons.person_add_alt_1_outlined,
+              color: Colors.white,
+            ),
             backgroundColor: Colors.blue,
             label: 'Agregar Cliente',
             labelStyle: TextStyle(fontSize: 18.0),
@@ -102,7 +112,10 @@ class _VentasPageState extends State<VentasPage> {
             },
           ),
           SpeedDialChild(
-            child: Icon(Icons.wrap_text),
+            child: Icon(
+              Icons.wrap_text,
+              color: Colors.white,
+            ),
             backgroundColor: Colors.orange,
             label: 'Agregar Comentario',
             labelStyle: TextStyle(fontSize: 18.0),
@@ -162,7 +175,7 @@ class _VentasPageState extends State<VentasPage> {
               children: [
                 Text(
                   'Cliente:',
-                  style: TextStyle(fontSize: 30),
+                  style: TextStyle(fontSize: 20),
                 ),
                 Center(
                   heightFactor: 2,
@@ -178,7 +191,7 @@ class _VentasPageState extends State<VentasPage> {
               children: [
                 Text(
                   'Cédula:',
-                  style: TextStyle(fontSize: 30),
+                  style: TextStyle(fontSize: 20),
                 ),
                 Center(
                   heightFactor: 2,
@@ -190,7 +203,7 @@ class _VentasPageState extends State<VentasPage> {
               children: [
                 Text(
                   'Domicilio:',
-                  style: TextStyle(fontSize: 30),
+                  style: TextStyle(fontSize: 20),
                 ),
                 Center(
                   heightFactor: 2,

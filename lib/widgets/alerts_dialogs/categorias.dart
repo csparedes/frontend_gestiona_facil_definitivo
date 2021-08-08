@@ -89,7 +89,10 @@ class AlertDialogFailEditarCategoria {
   static showAlertDialog(BuildContext context) {
     // Create button
     Widget okButton = CupertinoButton(
-      child: Text("OK"),
+      child: Text(
+        "OK",
+        style: TextStyle(color: Colors.deepPurple),
+      ),
       onPressed: () => Navigator.pop(context),
     );
 
@@ -120,7 +123,10 @@ class AlertDialogOkCrearCategoria {
   static showAlertDialog(BuildContext context) {
     // Create button
     Widget okButton = CupertinoButton(
-      child: Text("OK"),
+      child: Text(
+        "OK",
+        style: TextStyle(color: Colors.deepPurple),
+      ),
       onPressed: () {
         Navigator.pop(context);
         Navigator.pop(context);
@@ -154,7 +160,10 @@ class AlertDialogFailCrearCategoria {
   static showAlertDialog(BuildContext context) {
     // Create button
     Widget okButton = CupertinoButton(
-      child: Text("OK"),
+      child: Text(
+        "OK",
+        style: TextStyle(color: Colors.deepPurple),
+      ),
       onPressed: () => Navigator.pop(context),
     );
 

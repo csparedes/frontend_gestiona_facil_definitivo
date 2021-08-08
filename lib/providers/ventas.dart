@@ -13,7 +13,7 @@ class VentasProvider extends ChangeNotifier {
   final _token = "${dotenv.env['TOKEN']}";
   List<ProductoModel> listaTemporal = [];
   ClienteModel cliente = new ClienteModel(
-    id: '0',
+    id: '3',
     nombre: 'Consumidor Final',
     identificacion: '',
     domicilio: 'Tulcán',

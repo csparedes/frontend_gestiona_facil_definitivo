@@ -15,7 +15,9 @@ class ProductosCompraSearchDelegate extends SearchDelegate {
   List<Widget> buildActions(BuildContext context) {
     return [
       IconButton(
-          icon: Icon(CupertinoIcons.clear), onPressed: () => this.query = ''),
+        icon: Icon(CupertinoIcons.clear),
+        onPressed: () => this.query = '',
+      ),
     ];
   }
 

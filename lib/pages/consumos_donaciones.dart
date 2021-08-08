@@ -144,7 +144,7 @@ class _ConsumosDonacionesPageState extends State<ConsumosDonacionesPage> {
               children: [
                 Text(
                   'Domicilio:',
-                  style: TextStyle(fontSize: 30),
+                  style: TextStyle(fontSize: 20),
                 ),
                 Center(
                   heightFactor: 2,
@@ -192,7 +192,6 @@ class _ConsumosDonacionesPageState extends State<ConsumosDonacionesPage> {
             'cancel': 'Cancelar',
             'flash_on': 'Prender',
             'flash_off': 'Apagar',
-            'name': 'lol',
           },
           android: AndroidOptions(
             aspectTolerance: 0,
@@ -223,7 +222,7 @@ class _ConsumosDonacionesPageState extends State<ConsumosDonacionesPage> {
 
   _tablaProductosTemporales(
       BuildContext context, VentasProvider ventasProvider) {
-    final columns = ['Cant.', 'Nombre', 'Precio', 'Total', ''];
+    final columns = ['Cant.', 'Nombre', 'Precio', 'Total', 'Acciones'];
     return DataTable(
       columns: _getColumnas(columns),
       rows: _getFilas(listaProductos, ventasProvider),

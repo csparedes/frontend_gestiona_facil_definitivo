@@ -31,6 +31,8 @@ class ComprasProvider extends ChangeNotifier {
       //ok, aumentar cantidad
       listaTemporal[temp].aumentarCantidad();
     } else {
+      producto.cantidadAux = 1;
+      producto.totalAux = producto.cantidadAux * producto.precioVenta;
       listaTemporal.add(producto);
     }
 

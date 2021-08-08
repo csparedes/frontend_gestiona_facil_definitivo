@@ -5,7 +5,10 @@ class AlertDialogCompraRealizada {
   static showAlertDialog(BuildContext context) {
     // Create button
     Widget okButton = CupertinoButton(
-      child: Text("OK"),
+      child: Text(
+        "OK",
+        style: TextStyle(color: Colors.deepPurple),
+      ),
       onPressed: () => Navigator.pop(context),
     );
 
