@@ -87,8 +87,8 @@ class _ComprasPageState extends State<ComprasPage> {
             backgroundColor: Colors.green,
             label: 'Comprar',
             labelStyle: TextStyle(fontSize: 18.0),
-            onTap: () {
-              comprasProvider.realizarCompra();
+            onTap: () async {
+              await comprasProvider.realizarCompra();
               AlertDialogCompraRealizada.showAlertDialog(context);
               comprasProvider.limpiarLista();
             },

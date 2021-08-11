@@ -14,6 +14,9 @@ class KardexExistenciaModel {
   String id;
   String productoId;
   String productoString;
+  double productoPrecio;
+  String productoCategoria;
+  String productoCodigo;
   DateTime fechaCaducidad;
   double cantidad;
   double valorIngreso;
@@ -25,9 +28,12 @@ class KardexExistenciaModel {
     this.id = '',
     required this.productoId,
     this.productoString = '',
+    this.productoPrecio = 0.0,
     required this.fechaCaducidad,
     required this.cantidad,
     required this.valorIngreso,
+    this.productoCategoria = '',
+    this.productoCodigo = '',
     this.estado = true,
     this.createdAt = '',
     this.updatedAt = '',
@@ -38,6 +44,9 @@ class KardexExistenciaModel {
         id: json["id"],
         productoId: json["productoId"],
         productoString: json["productoString"],
+        productoPrecio: json["produtoPrecio"],
+        productoCategoria: json['productoCategoria'],
+        productoCodigo: json['productoCodigo'],
         fechaCaducidad: DateTime.parse(json["fechaCaducidad"]),
         cantidad: json["cantidad"].toDouble(),
         valorIngreso: json["valorIngreso"].toDouble(),
@@ -50,6 +59,9 @@ class KardexExistenciaModel {
         "id": id,
         "productoId": productoId,
         "productoString": productoString,
+        "produtoPrecio": productoPrecio,
+        "productoCategoria": productoCategoria,
+        "productoCodigo": productoCodigo,
         "fechaCaducidad":
             "${fechaCaducidad.year.toString().padLeft(4, '0')}-${fechaCaducidad.month.toString().padLeft(2, '0')}-${fechaCaducidad.day.toString().padLeft(2, '0')}",
         "cantidad": cantidad,

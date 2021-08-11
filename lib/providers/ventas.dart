@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:gestionafacil_v3/models/invoice_pdf.dart';
 import 'package:gestionafacil_v3/widgets/alerts_dialogs/compras.dart';
 import 'package:http/http.dart' as http;
 
@@ -19,11 +20,13 @@ class VentasProvider extends ChangeNotifier {
     domicilio: 'Tulcán',
     email: '',
   );
-  String comentario = 'Ninguno';
+  String comentario = 'Sin novedades';
   double ventaTotal = 0.0;
   String comprobante = '000';
 
   get obtenerListaTemporal => listaTemporal;
+
+  get mostrarcliente => cliente;
 
   set agregarproducto(ProductoModel producto) {
     final temp = listaTemporal
@@ -145,6 +148,15 @@ class VentasProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void modificarCantidad(String codigo, cantidad) {
+    final temp =
+        listaTemporal.indexWhere((element) => element.codigo == codigo);
+    if (temp != -1) {
+      listaTemporal[temp].modificarCantidad(cantidad);
+    }
+    notifyListeners();
+  }
+
   get mostrarComentario => comentario;
 
   List _configurarListaProductos(List<ProductoModel> lista) {
@@ -162,7 +174,22 @@ class VentasProvider extends ChangeNotifier {
     return aux;
   }
 
-  Future<int> _obtenerUltimoComprobante() async {
+  List<InvoiceItem> productoInvoicePdf() {
+    List<InvoiceItem> aux = [];
+
+    this.listaTemporal.forEach((producto) {
+      final temp = InvoiceItem(
+          description: producto.nombre,
+          date: DateTime.now(),
+          quantity: producto.cantidadAux,
+          unitPrice: producto.precioVenta);
+      aux.add(temp);
+    });
+
+    return aux;
+  }
+
+  Future<int> obtenerUltimoComprobante() async {
     final _urlAux =
         '${dotenv.env['BASE_URL']}/api/encabezadoVenta/consulta/ultimoEncabezado';
     final consulta = await http.get(
@@ -176,17 +203,45 @@ class VentasProvider extends ChangeNotifier {
       return -1;
     } else {
       final resp = jsonDecode(consulta.body);
-      return (resp['comprobante']['ultimoComprobante'] == null)
-          ? 1
-          : resp['comprobante']['ultimoComprobante'] + 1;
+
+      if (resp['comprobante']['ultimoComprobante'] == null) {
+        this.comprobante = '1';
+        return 1;
+      } else {
+        final aux = resp['comprobante']['ultimoComprobante'] + 1;
+        this.comentario = aux.toString();
+        return aux;
+      }
     }
   }
 
-  // Future<Map<String, dynamic>> realizarVenta() async {
+  Future<String> obtenerUltimoComprobanteString() async {
+    final _urlAux =
+        '${dotenv.env['BASE_URL']}/api/encabezadoVenta/consulta/ultimoEncabezado';
+    final consulta = await http.get(
+      Uri.parse(_urlAux),
+      headers: <String, String>{
+        "Content-Type": "application/json",
+        "x-token": _token
+      },
+    );
+    if (consulta.statusCode != 200) {
+      return 'Sin Comprobante';
+    } else {
+      final resp = jsonDecode(consulta.body);
+
+      return (resp['comprobante']['ultimoComprobante'] == null)
+          ? '1'
+          : (resp['comprobante']['ultimoComprobante'] + 1).toString();
+    }
+  }
+
+  get mostrarComprobante => this.comprobante;
+
   Future<Map<String, dynamic>> realizarVenta() async {
     double saver = this.ventaTotal;
     Map<String, dynamic> venta = {
-      "comprobante": await _obtenerUltimoComprobante(),
+      "comprobante": await obtenerUltimoComprobante(),
       "clienteId": "${cliente.id}",
       "fechaVenta": DateTime.now().toString(),
       "comentario": this.comentario,
@@ -202,10 +257,14 @@ class VentasProvider extends ChangeNotifier {
         "x-token": _token
       },
     );
+    final Map<String, dynamic> decodedData = jsonDecode(consulta.body);
+    print(decodedData);
     if (consulta.statusCode != 200) {
-      //error
-
-      return {"ok": false, "msg": 'Ha ocurrido un error'};
+      return {
+        "ok": false,
+        "msg": 'Ha ocurrido un error',
+        "razon": decodedData['razon']
+      };
     } else {
       return {"ok": true, "msg": 'Ha salido todo muy bien'};
     }
@@ -213,7 +272,7 @@ class VentasProvider extends ChangeNotifier {
 
   Future<Map<String, dynamic>> realizarDonacion() async {
     Map<String, dynamic> venta = {
-      "comprobante": await _obtenerUltimoComprobante(),
+      "comprobante": await obtenerUltimoComprobante(),
       "clienteId": "2",
       "fechaVenta": DateTime.now().toString(),
       "comentario": comentario,
@@ -240,7 +299,7 @@ class VentasProvider extends ChangeNotifier {
 
   Future<Map<String, dynamic>> realizarConsumo() async {
     Map<String, dynamic> venta = {
-      "comprobante": await _obtenerUltimoComprobante(),
+      "comprobante": await obtenerUltimoComprobante(),
       "clienteId": "1",
       "fechaVenta": DateTime.now().toString(),
       "comentario": comentario,

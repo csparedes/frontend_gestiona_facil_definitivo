@@ -44,33 +44,49 @@ class KardexExistenciasProvider extends ChangeNotifier {
     return listaKardex;
   }
 
-// Future<Map<String, dynamic>> crearExistenciaNueva(
-//       KardexExistenciaModel existencia) async {
-//     final consulta = await http.post(
-//       Uri.parse(_url),
-//       body: jsonEncode(existencia),
-//       headers: <String, String>{
-//         "Content-Type": "application/json",
-//         "x-token": _token
-//       },
-//     );
-//     notifyListeners();
+  Future<List<KardexExistenciaModel>> mostrarExistenciasPorQuery(
+      String query) async {
+    final consulta = await http.get(
+      Uri.parse('$_url/producto/$query'),
+      headers: <String, String>{
+        "Content-Type": "application/json",
+        "x-token": _token
+      },
+    );
 
-//     final Map<String, dynamic> decodedData = jsonDecode(consulta.body);
+    final Map<String, dynamic> decodedData = jsonDecode(consulta.body);
 
-//     if (consulta.statusCode != 200) {
-//       return <String, dynamic>{
-//         'ok': false,
-//         'msg': decodedData['msg'],
-//       };
-//     }
+    if (consulta.statusCode != 200) {
+      return [];
+    }
+    final List<KardexExistenciaModel> listaKardex = [];
+    decodedData.forEach((key, val) {
+      KardexExistenciaModel kardexAux = new KardexExistenciaModel(
+          productoId: '',
+          fechaCaducidad: DateTime.now(),
+          cantidad: 0.0,
+          valorIngreso: 0.0);
 
-//     return <String, dynamic>{
-//       'ok': true,
-//       'msg': decodedData['msg'],
-//       'producto': decodedData['producto']
-//     };
-//   }
+      if (key == 'listaKardex') {
+        final List tmp = val;
+        tmp.forEach((value) {
+          kardexAux.productoId = (value['Producto']['id']).toString();
+          kardexAux.productoCategoria = value['Producto']['categoriumId'];
+          kardexAux.productoPrecio =
+              double.parse(value['Producto']['precioVenta'].toString());
+          kardexAux.productoCodigo = value['Producto']['codigo'];
+          kardexAux.productoString = value['Producto']['nombre'];
+          kardexAux.fechaCaducidad = DateTime.parse(value['fechaCaducidad']);
+          kardexAux.cantidad = double.parse(value['cantidad'].toString());
+          kardexAux.valorIngreso =
+              double.parse(value['valorIngreso'].toString());
+        });
+        listaKardex.add(kardexAux);
+      }
+    });
+
+    return listaKardex;
+  }
 
   Future<Map<String, dynamic>> editarProducto(
       String codigo, KardexExistenciaModel producto) async {
@@ -99,30 +115,4 @@ class KardexExistenciasProvider extends ChangeNotifier {
       'producto': decodedData['producto']
     };
   }
-
-  // Future<Map<String, dynamic>> borrarProducto(String codigo) async {
-  //   final consulta = await http.delete(
-  //     Uri.parse('$_url/$codigo'),
-  //     headers: <String, String>{
-  //       "Content-Type": "application/json",
-  //       "x-token": _token
-  //     },
-  //   );
-  //   notifyListeners();
-
-  //   final Map<String, dynamic> decodedData = jsonDecode(consulta.body);
-
-  //   if (consulta.statusCode != 200) {
-  //     return <String, dynamic>{
-  //       'ok': false,
-  //       'msg': decodedData['msg'],
-  //     };
-  //   }
-
-  //   return <String, dynamic>{
-  //     'ok': true,
-  //     'msg': decodedData['msg'],
-  //   };
-  // }
-
 }

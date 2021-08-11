@@ -28,7 +28,6 @@ class ComprasProvider extends ChangeNotifier {
     final temp = listaTemporal
         .indexWhere((element) => element.codigo == producto.codigo);
     if (temp != -1) {
-      //ok, aumentar cantidad
       listaTemporal[temp].aumentarCantidad();
     } else {
       producto.cantidadAux = 1;
@@ -232,10 +231,10 @@ class ComprasProvider extends ChangeNotifier {
         "x-token": _token
       },
     );
-
+    final Map<String, dynamic> decodedData = jsonDecode(consulta.body);
     if (consulta.statusCode != 200) {
       //error
-      return {"ok": false, "msg": "Ha ocurrido un error"};
+      return {"ok": decodedData['bandera'], "msg": decodedData['razon']};
     } else {
       return {"ok": true, "msg": "Ha salido muy bien"};
     }
@@ -261,7 +260,6 @@ class ComprasProvider extends ChangeNotifier {
     );
 
     if (consulta.statusCode != 200) {
-      //error
       return {"ok": false, "msg": "Ha ocurrido un error"};
     } else {
       return {"ok": true, "msg": "Ha salido muy bien"};

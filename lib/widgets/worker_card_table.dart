@@ -9,11 +9,13 @@ class WorkerTableAdmin extends StatelessWidget {
       children: [
         TableRow(children: [
           _SigleCard(
-            color: Colors.orange,
-            icon: Icons.swap_horiz,
-            text: 'Consumos\nDonaciones',
-            onTap: () => Navigator.pushNamed(context, 'consumosDonaciones'),
+            color: Colors.blueAccent,
+            icon: Icons.storefront,
+            text: 'Compras',
+            onTap: () => Navigator.pushNamed(context, 'compras'),
           ),
+        ]),
+        TableRow(children: [
           _SigleCard(
             color: Colors.pinkAccent,
             icon: Icons.add_shopping_cart,
@@ -23,44 +25,26 @@ class WorkerTableAdmin extends StatelessWidget {
         ]),
         TableRow(children: [
           _SigleCard(
-            color: Colors.yellow,
-            icon: Icons.drag_indicator_outlined,
-            text: 'Lista Productos',
-            onTap: () => Navigator.pushNamed(context, 'productos'),
-          ),
-          _SigleCard(
             color: Colors.green,
-            icon: Icons.category_outlined,
-            text: 'Categorias',
-            onTap: () => Navigator.pushNamed(context, 'categorias'),
+            icon: Icons.inventory_2_outlined,
+            text: 'Productos',
+            onTap: () => Navigator.pushNamed(context, 'homeProductos'),
+          ),
+        ]),
+        TableRow(children: [
+          _SigleCard(
+            color: Colors.orange,
+            icon: Icons.swap_horiz,
+            text: 'Consumos\nDonaciones',
+            onTap: () => Navigator.pushNamed(context, 'consumosDonaciones'),
           ),
         ]),
         TableRow(children: [
           _SigleCard(
             color: Colors.red,
-            icon: Icons.group_outlined,
-            text: 'Clientes',
-            onTap: () => Navigator.pushNamed(context, 'clientes'),
-          ),
-          _SigleCard(
-            color: Colors.lime,
-            icon: Icons.schedule_outlined,
-            text: 'Existencias',
-            onTap: () => Navigator.pushNamed(context, 'existencias'),
-          ),
-        ]),
-        TableRow(children: [
-          _SigleCard(
-            color: Colors.orangeAccent,
-            icon: Icons.shopping_bag_outlined,
-            text: 'Ingresos',
-            onTap: () => Navigator.pushNamed(context, 'ingresos'),
-          ),
-          _SigleCard(
-            color: Colors.lightBlue,
-            icon: Icons.store_mall_directory,
-            text: 'Salidas',
-            onTap: () => Navigator.pushNamed(context, 'salidas'),
+            icon: Icons.verified_outlined,
+            text: 'Kardex',
+            onTap: () => Navigator.pushNamed(context, 'homeKardex'),
           ),
         ]),
       ],

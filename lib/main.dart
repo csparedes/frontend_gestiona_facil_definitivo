@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:gestionafacil_v3/pages/home_kardex.dart';
+import 'package:gestionafacil_v3/pages/home_personas.dart';
+import 'package:gestionafacil_v3/pages/home_productos.dart';
 import 'package:gestionafacil_v3/pages/perchaNueva.dart';
 import 'package:gestionafacil_v3/pages/perchar.dart';
 import 'package:gestionafacil_v3/pages/producto_codigo_generar.dart';
@@ -139,6 +142,9 @@ class _MyAppState extends State<MyApp> {
           'generarCodigo': (_) => GenerarCodigoPage(),
           'perchas': (_) => PercharPage(),
           'percharNueva': (_) => PerchaNuevaPage(),
+          'homeKardex': (_) => HomeKardexPage(),
+          'homePersonas': (_) => HomePersonasPage(),
+          'homeProductos': (_) => HomeProductosPage()
         },
         theme: ThemeData(
           textTheme: GoogleFonts.nanumGothicTextTheme(

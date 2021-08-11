@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:gestionafacil_v3/models/kardex_existencia.dart';
 import 'package:gestionafacil_v3/models/producto.dart';
+import 'package:gestionafacil_v3/providers/kardex_existencias.dart';
 import 'package:gestionafacil_v3/providers/ventas.dart';
 import 'package:provider/provider.dart';
-
-import 'package:gestionafacil_v3/providers/productos.dart';
 
 class ProductosVentaSearchDelegate extends SearchDelegate {
   final ventasProvider;
@@ -29,11 +29,11 @@ class ProductosVentaSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildResults(BuildContext context) {
-    final productosProvider = Provider.of<ProductosProvider>(context);
+    final kardexProvider = Provider.of<KardexExistenciasProvider>(context);
 
     final columnas = ['Nombre', 'Precio', ''];
     return FutureBuilder(
-      future: productosProvider.mostrarProductoNombreQuery(query),
+      future: kardexProvider.mostrarExistenciasPorQuery(query),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
           return DataTable(
@@ -59,12 +59,13 @@ class ProductosVentaSearchDelegate extends SearchDelegate {
           ))
       .toList();
 
-  _getFilas(List<ProductoModel> productos, VentasProvider ventasProvider) =>
-      productos.map((ProductoModel producto) {
+  _getFilas(
+          List<KardexExistenciaModel> kardexs, VentasProvider ventasProvider) =>
+      kardexs.map((KardexExistenciaModel kardex) {
         final cells = [
-          producto.nombre,
-          producto.precioVenta.toString(),
-          '${producto.id}_${producto.codigo}_${producto.nombre}_${producto.precioVenta}_${producto.categoriumId}',
+          kardex.productoString,
+          kardex.productoPrecio.toString(),
+          '${kardex.id}_${kardex.productoId}_${kardex.productoString}_${kardex.productoPrecio}_${kardex.productoCategoria}_${kardex.productoCodigo}',
         ];
         return DataRow(cells: _getCeldas(cells, ventasProvider));
       }).toList();
@@ -80,18 +81,18 @@ class ProductosVentaSearchDelegate extends SearchDelegate {
                       GestureDetector(
                         onTap: () {
                           final split = dato.split('_');
+                          final id = split[1];
                           final nombre = split[2];
-                          final categoriumId = split[4];
-                          final codigo = split[1];
-                          final precioVenta = double.parse(split[3]);
+                          final categoria = split[4];
+                          final codigo = split[5];
+                          final precio = double.parse(split[3]);
                           final temp = new ProductoModel(
+                            id: id,
                             nombre: nombre,
-                            categoriumId: categoriumId,
+                            categoriumId: categoria,
+                            precioVenta: precio,
                             codigo: codigo,
-                            precioVenta: precioVenta,
-                            cantidadAux: 1,
                           );
-
                           ventasProvider.agregarproducto = temp;
                         },
                         child: Icon(
@@ -112,11 +113,11 @@ class ProductosVentaSearchDelegate extends SearchDelegate {
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    final productosProvider = Provider.of<ProductosProvider>(context);
-    final ventasProvider = Provider.of<VentasProvider>(context);
+    final kardexProvider = Provider.of<KardexExistenciasProvider>(context);
+
     final columnas = ['Nombre', 'Precio', ''];
     return FutureBuilder(
-      future: productosProvider.mostrarProductoNombreQuery(query),
+      future: kardexProvider.mostrarExistenciasPorQuery(query),
       builder: (BuildContext context, AsyncSnapshot snapshot) {
         if (snapshot.hasData) {
           return DataTable(

@@ -2,6 +2,8 @@ import 'package:barcode_widget/barcode_widget.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gestionafacil_v3/models/producto.dart';
+import 'package:gestionafacil_v3/providers/pdf_api_provider.dart';
+import 'package:gestionafacil_v3/providers/pdf_codigo_barras.dart';
 
 class AlertDialogProductoCodigoBarras {
   static showAlertDialog(
@@ -15,6 +17,17 @@ class AlertDialogProductoCodigoBarras {
       onPressed: () {
         producto.codigo = data;
         Navigator.of(context).pop();
+      },
+    );
+
+    Widget printButton = CupertinoButton(
+      child: Text('Imprimir',
+          style: TextStyle(
+            color: Colors.deepPurple,
+          )),
+      onPressed: () async {
+        final pdfFile = await PdfCodigoBarras.generate(data);
+        PdfApi.openFile(pdfFile);
       },
     );
 
@@ -32,6 +45,7 @@ class AlertDialogProductoCodigoBarras {
       ),
       actions: [
         okButton,
+        printButton,
       ],
     );
 

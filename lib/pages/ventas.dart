@@ -4,9 +4,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:gestionafacil_v3/models/cliente.dart';
+import 'package:gestionafacil_v3/models/invoice_customer.dart';
+import 'package:gestionafacil_v3/models/invoice_pdf.dart';
+import 'package:gestionafacil_v3/models/invoice_supplier.dart';
 import 'package:gestionafacil_v3/models/producto.dart';
+import 'package:gestionafacil_v3/providers/pdf_api_provider.dart';
+import 'package:gestionafacil_v3/providers/pdf_provider.dart';
 import 'package:gestionafacil_v3/providers/ventas.dart';
 import 'package:gestionafacil_v3/widgets/alerts_dialogs/ventas.dart';
+import 'package:gestionafacil_v3/widgets/alerts_dialogs/ventas_precio.dart';
 import 'package:gestionafacil_v3/widgets/buscador_cliente.dart';
 import 'package:gestionafacil_v3/widgets/buscador_productos_venta.dart';
 import 'package:provider/provider.dart';
@@ -78,10 +84,14 @@ class _VentasPageState extends State<VentasPage> {
             backgroundColor: Colors.green,
             label: 'Vender',
             labelStyle: TextStyle(fontSize: 18.0),
-            onTap: () {
-              ventasProvider.realizarVenta();
-              AlertDialogVentaRealizada.showAlertDialog(context);
-              ventasProvider.limpiarLista();
+            onTap: () async {
+              final res = await ventasProvider.realizarVenta();
+              if (res['ok']) {
+                AlertDialogVentaRealizada.showAlertDialog(context);
+                ventasProvider.limpiarLista();
+              } else {
+                AlertDialogVentaFallida.showAlertDialog(context, res['razon']);
+              }
             },
           ),
           SpeedDialChild(
@@ -120,6 +130,39 @@ class _VentasPageState extends State<VentasPage> {
             label: 'Agregar Comentario',
             labelStyle: TextStyle(fontSize: 18.0),
             onTap: () => Navigator.pushNamed(context, 'ventasComentario'),
+          ),
+          SpeedDialChild(
+            child: Icon(
+              Icons.picture_as_pdf_outlined,
+              color: Colors.white,
+            ),
+            backgroundColor: Colors.black,
+            label: 'Generar PDF',
+            labelStyle: TextStyle(fontSize: 18.0),
+            onTap: () async {
+              final date = DateTime.now();
+              final dueDate = DateTime.now().add(Duration(days: 15));
+              final invoice = Invoice(
+                supplier: Supplier(
+                    name: 'Víveres Stalin',
+                    address: 'Tulcán - Ecuador',
+                    paymentInfo: ''),
+                customer: Customer(
+                    name: ventasProvider.mostrarCliente().nombre,
+                    address: ventasProvider.mostrarCliente().domicilio,
+                    cedula: ventasProvider.mostrarCliente().identificacion),
+                info: InvoiceInfo(
+                    description: ventasProvider.mostrarComentario,
+                    number:
+                        await ventasProvider.obtenerUltimoComprobanteString(),
+                    date: date,
+                    dueDate: dueDate),
+                items: ventasProvider.productoInvoicePdf(),
+              );
+
+              final pdfFile = await PdfInvoiceApi.generate(invoice);
+              PdfApi.openFile(pdfFile);
+            },
           ),
         ]);
   }
@@ -315,7 +358,7 @@ class _VentasPageState extends State<VentasPage> {
       productos.map((ProductoModel producto) {
         // final i = 0;
         final cells = [
-          producto.cantidadAux.toStringAsFixed(0),
+          producto.cantidadAux.toStringAsFixed(0) + '#${producto.codigo}',
           producto.nombre,
           producto.precioVenta.toStringAsFixed(2),
           producto.totalAux.toStringAsFixed(2),
@@ -329,7 +372,18 @@ class _VentasPageState extends State<VentasPage> {
       .map(
         (dato) => DataCell(
           (!dato.toString().contains('_'))
-              ? Text('$dato')
+              ? Container(
+                  child: (dato.toString().contains('#'))
+                      ? GestureDetector(
+                          onLongPress: () {
+                            final str = dato.toString().split('#')[1];
+                            AlertDialogEditarCantidadVenta.showAlertDialog(
+                                context, ventasProvider, str);
+                          },
+                          child: Text(dato.toString().split('#')[0]),
+                        )
+                      : Text(dato.toString()),
+                )
               : Container(
                   child: Row(
                     children: [

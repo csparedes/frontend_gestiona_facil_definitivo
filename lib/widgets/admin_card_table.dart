@@ -23,10 +23,10 @@ class CardTableAdmin extends StatelessWidget {
         ]),
         TableRow(children: [
           _SigleCard(
-            color: Colors.black,
-            icon: Icons.done,
-            text: 'Realizar Pedido',
-            onTap: () => Navigator.pushNamed(context, 'realizarPedido'),
+            color: Colors.green,
+            icon: Icons.inventory_2_outlined,
+            text: 'Productos',
+            onTap: () => Navigator.pushNamed(context, 'homeProductos'),
           ),
           _SigleCard(
             color: Colors.orange,
@@ -35,77 +35,19 @@ class CardTableAdmin extends StatelessWidget {
             onTap: () => Navigator.pushNamed(context, 'consumosDonaciones'),
           ),
         ]),
-        TableRow(
-          children: [
-            _SigleCard(
-              color: Colors.indigoAccent,
-              icon: Icons.drag_indicator_outlined,
-              text: 'Lista Productos',
-              onTap: () => Navigator.pushNamed(context, 'productos'),
-            ),
-            _SigleCard(
-              color: Colors.green,
-              icon: Icons.category_outlined,
-              text: 'Categorias',
-              onTap: () => Navigator.pushNamed(context, 'categorias'),
-            ),
-          ],
-        ),
         TableRow(children: [
-          _SigleCard(
-            color: Colors.teal,
-            icon: Icons.precision_manufacturing_outlined,
-            text: 'Perchar',
-            onTap: () => Navigator.pushNamed(context, 'perchas'),
-          ),
-          _SigleCard(
-            color: Colors.lime,
-            icon: Icons.schedule_outlined,
-            text: 'Existencias',
-            onTap: () => Navigator.pushNamed(context, 'existencias'),
-          ),
-        ]),
-        TableRow(children: [
-          _SigleCard(
-            color: Colors.teal,
-            icon: Icons.person_pin_outlined,
-            text: 'Proveedores',
-            onTap: () => Navigator.pushNamed(context, 'proveedores'),
-          ),
           _SigleCard(
             color: Colors.red,
-            icon: Icons.group_outlined,
-            text: 'Clientes',
-            onTap: () => Navigator.pushNamed(context, 'clientes'),
-          ),
-        ]),
-        TableRow(children: [
-          _SigleCard(
-            color: Colors.orangeAccent,
-            icon: Icons.shopping_bag_outlined,
-            text: 'Ingresos',
-            onTap: () => Navigator.pushNamed(context, 'ingresos'),
-          ),
-          _SigleCard(
-            color: Colors.lightBlue,
-            icon: Icons.store_mall_directory,
-            text: 'Salidas',
-            onTap: () => Navigator.pushNamed(context, 'salidas'),
-          ),
-        ]),
-        TableRow(children: [
-          _SigleCard(
-            color: Colors.lime,
-            icon: Icons.schedule_outlined,
-            text: 'Existencias',
-            onTap: () => Navigator.pushNamed(context, 'existencias'),
+            icon: Icons.verified_outlined,
+            text: 'Kardex',
+            onTap: () => Navigator.pushNamed(context, 'homeKardex'),
           ),
           _SigleCard(
             color: Colors.black,
             icon: Icons.perm_identity_outlined,
-            text: 'Usuarios',
+            text: 'Usuarios\nClientes',
             onTap: () {
-              Navigator.pushNamed(context, 'usuarios');
+              Navigator.pushNamed(context, 'homePersonas');
             },
           ),
         ]),
@@ -184,6 +126,118 @@ class _CardBackground extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class CardTableKardex extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Table(
+      children: [
+        TableRow(children: [
+          _SigleCard(
+            color: Colors.teal,
+            icon: Icons.precision_manufacturing_outlined,
+            text: 'Perchar',
+            onTap: () => Navigator.pushNamed(context, 'perchas'),
+          ),
+        ]),
+        TableRow(children: [
+          _SigleCard(
+            color: Colors.lime,
+            icon: Icons.schedule_outlined,
+            text: 'Existencias',
+            onTap: () => Navigator.pushNamed(context, 'existencias'),
+          ),
+        ]),
+        TableRow(children: [
+          _SigleCard(
+            color: Colors.orangeAccent,
+            icon: Icons.shopping_bag_outlined,
+            text: 'Ingresos',
+            onTap: () => Navigator.pushNamed(context, 'ingresos'),
+          ),
+        ]),
+        TableRow(children: [
+          _SigleCard(
+            color: Colors.lightBlue,
+            icon: Icons.store_mall_directory,
+            text: 'Salidas',
+            onTap: () => Navigator.pushNamed(context, 'salidas'),
+          ),
+        ])
+      ],
+    );
+  }
+}
+
+class CardTablePersonas extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Table(
+      children: [
+        TableRow(children: [
+          _SigleCard(
+            color: Colors.teal,
+            icon: Icons.person_pin_outlined,
+            text: 'Proveedores',
+            onTap: () => Navigator.pushNamed(context, 'proveedores'),
+          ),
+        ]),
+        TableRow(children: [
+          _SigleCard(
+            color: Colors.red,
+            icon: Icons.group_outlined,
+            text: 'Clientes',
+            onTap: () => Navigator.pushNamed(context, 'clientes'),
+          ),
+        ]),
+        TableRow(children: [
+          _SigleCard(
+            color: Colors.black,
+            icon: Icons.perm_identity_outlined,
+            text: 'Usuarios',
+            onTap: () {
+              Navigator.pushNamed(context, 'usuarios');
+            },
+          ),
+        ])
+      ],
+    );
+  }
+}
+
+class CardTableProductos extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Table(
+      children: [
+        TableRow(children: [
+          _SigleCard(
+            color: Colors.black,
+            icon: Icons.done,
+            text: 'Realizar Pedido',
+            onTap: () => Navigator.pushNamed(context, 'realizarPedido'),
+          ),
+        ]),
+        TableRow(children: [
+          _SigleCard(
+            color: Colors.indigoAccent,
+            icon: Icons.drag_indicator_outlined,
+            text: 'Lista Productos',
+            onTap: () => Navigator.pushNamed(context, 'productos'),
+          ),
+        ]),
+        TableRow(children: [
+          _SigleCard(
+            color: Colors.green,
+            icon: Icons.category_outlined,
+            text: 'Categorias',
+            onTap: () => Navigator.pushNamed(context, 'categorias'),
+          ),
+        ])
+      ],
     );
   }
 }

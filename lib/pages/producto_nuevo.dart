@@ -68,6 +68,8 @@ class _ProductoNuevoPageState extends State<ProductoNuevoPage> {
                 SizedBox(height: 15),
                 _codigo(producto.codigo),
                 SizedBox(height: 5),
+                _tieneIva(producto.tieneIva),
+                SizedBox(height: 5),
                 _escanear(),
                 SizedBox(height: 15),
                 _botonEditar(context),
@@ -173,6 +175,30 @@ class _ProductoNuevoPageState extends State<ProductoNuevoPage> {
     );
   }
 
+  _tieneIva(bool tieneIva) {
+    return Padding(
+      padding: EdgeInsets.symmetric(vertical: 10),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          Text(
+            '¿Tiene Iva?',
+            style: TextStyle(fontSize: 18),
+          ),
+          Switch(
+            value: tieneIva,
+            onChanged: (val) {
+              setState(() {
+                producto.tieneIva = val;
+              });
+            },
+            activeColor: Colors.deepPurple,
+          ),
+        ],
+      ),
+    );
+  }
+
   _escanear() {
     return ElevatedButton.icon(
       onPressed: () => _scan(),
@@ -263,6 +289,8 @@ class _ProductoNuevoPageState extends State<ProductoNuevoPage> {
                 _precioVenta(producto.precioVenta),
                 SizedBox(height: 15),
                 _codigo(producto.codigo),
+                SizedBox(height: 5),
+                _tieneIva(producto.tieneIva),
                 SizedBox(height: 5),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,

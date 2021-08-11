@@ -17,6 +17,7 @@ class ProductoModel {
   String codigo;
   double precioVenta;
   bool estado;
+  bool tieneIva;
   String createdAt;
   String updatedAt;
   double cantidadAux;
@@ -28,8 +29,9 @@ class ProductoModel {
       required this.nombre,
       required this.categoriumId,
       this.categoriumString = '',
-      required this.codigo,
+      this.codigo = '',
       required this.precioVenta,
+      this.tieneIva = false,
       this.estado = true,
       this.createdAt = '',
       this.updatedAt = '',
@@ -45,6 +47,7 @@ class ProductoModel {
         codigo: json["codigo"],
         precioVenta: json["precioVenta"].toDouble(),
         estado: json["estado"],
+        tieneIva: json['tieneIva'],
         createdAt: json["createdAt"],
         updatedAt: json["updatedAt"],
         fechaCaducidadAux: json["fechaCaducidadAux"],
@@ -58,6 +61,7 @@ class ProductoModel {
         "codigo": codigo,
         "precioVenta": precioVenta,
         "estado": estado,
+        "tieneIva": tieneIva,
         "createdAt": createdAt,
         "updatedAt": updatedAt,
         "fechaCaducidadAux": fechaCaducidadAux
